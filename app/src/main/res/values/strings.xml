@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Ecology Assistant</string>
+    <string name="txt_name">Имя</string>
+    <string name="txt_secondname">Фамилия</string>
+    <string name="txt_password">Пароль</string>
+    <string name="txt_number">Номер тел</string>
+    <string name="txt_email">Почта</string>
+    <string name="txt_reg">Регистрация</string>
+    <string name="txt_regbtn">Зарегистрироваться</string>
+</resources>

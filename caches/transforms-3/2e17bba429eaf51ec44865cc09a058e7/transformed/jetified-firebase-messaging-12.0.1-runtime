@@ -1,0 +1,12 @@
+com.google.firebase.messaging.FirebaseMessaging
+com.google.firebase.messaging.FirebaseMessagingService
+com.google.firebase.messaging.RemoteMessage
+com.google.firebase.messaging.RemoteMessage$Builder
+com.google.firebase.messaging.RemoteMessage$Notification
+com.google.firebase.messaging.SendException
+com.google.firebase.messaging.zza
+com.google.firebase.messaging.zzb
+com.google.firebase.messaging.zzc
+com.google.firebase.messaging.zzd
+com.google.firebase.messaging.zze
+com.google.firebase.messaging.zzf

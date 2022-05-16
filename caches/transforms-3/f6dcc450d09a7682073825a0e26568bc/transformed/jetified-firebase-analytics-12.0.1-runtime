@@ -1,0 +1,5 @@
+com.google.android.gms.measurement.AppMeasurementContentProvider
+com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver
+com.google.android.gms.measurement.AppMeasurementJobService
+com.google.android.gms.measurement.AppMeasurementReceiver
+com.google.android.gms.measurement.AppMeasurementService
