@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/drawable/button_reg.xml" value="0.2055" />
+        <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/layout-w1240dp/activity_login2.xml" value="0.21404793608521971" />
+        <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/layout-w936dp/activity_login2.xml" value="0.251171875" />
+        <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/layout/activity_login2.xml" value="0.33489583333333334" />
         <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/layout/registration.xml" value="0.386144578313253" />
       </map>
     </option>
   </component>

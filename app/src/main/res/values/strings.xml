@@ -6,5 +6,9 @@
     <string name="txt_number">Номер тел</string>
     <string name="txt_email">Почта</string>
     <string name="txt_reg">Регистрация</string>
+    <string name="txt_aut">Авторизация</string>
+    <string name="txt_createac">Создать аккаунт</string>
+    <string name="txt_loginac">Войти в аккаунт</string>
     <string name="txt_regbtn">Зарегистрироваться</string>
+    <string name="txt_autbtn">Войти</string>
 </resources>
