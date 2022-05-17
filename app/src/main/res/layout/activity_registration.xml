@@ -3,6 +3,7 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+android:id="@+id/root_element"
 android:gravity="center"
 tools:context=".RegistrationActivity">
 
@@ -98,7 +99,6 @@ tools:context=".RegistrationActivity">
         android:layout_below="@+id/editTextPassword"
         android:layout_centerInParent="true"
         android:layout_marginTop="40dp"
-        android:onClick="onClickSave"
         android:text="@string/txt_regbtn"
         android:textColor="#FFFF"
         android:background="@drawable/button_reg"
