@@ -12,9 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcologyAssistant">
         <activity
+            android:name=".MapActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RegistrationActivity"
             android:exported="true"

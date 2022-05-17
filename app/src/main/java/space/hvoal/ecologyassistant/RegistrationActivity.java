@@ -1,5 +1,6 @@
 package space.hvoal.ecologyassistant;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -13,12 +14,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -47,22 +49,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
        loginacc = findViewById(R.id.textViewLoginAccaunt);
 
-       loginacc.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-               startActivity(intent);
-           }
+       loginacc.setOnClickListener(view -> {
+           Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+           startActivity(intent);
        });
 
         buttonreg = findViewById(R.id.buttonreg);
 
-        buttonreg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                register();
-            }
-        });
+        buttonreg.setOnClickListener(view -> register());
 
     }
 
@@ -99,27 +93,20 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Регистрация пользователя
         auth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                    User user = new User();
-                    user.setName(name.getText().toString());
-                    user.setSecondname(secondname.getText().toString());
-                    user.setEmail(email.getText().toString());
-                    user.setPhone(phone.getText().toString());
-                    user.setPassword(pass.getText().toString());
+                .addOnSuccessListener(authResult -> {
+                User user = new User();
+                user.setName(name.getText().toString());
+                user.setSecondname(secondname.getText().toString());
+                user.setEmail(email.getText().toString());
+                user.setPhone(phone.getText().toString());
+                user.setPassword(pass.getText().toString());
 
-                    users.child(user.getEmail())
-                            .setValue(user)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Snackbar.make(root, "Регистрация прошла успешна!", Snackbar.LENGTH_SHORT).show();
-                                }
-                            });
-
-                    }
-                });
+                users.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                        .setValue(user)
+                        .addOnSuccessListener(unused -> Snackbar.make(root, "Регистрация прошла успешна!", Snackbar.LENGTH_SHORT).show());
+                    startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
+                    finish();
+                }).addOnFailureListener(e -> Snackbar.make(root, "Ошибка регистрации. " + e.getMessage(), Snackbar.LENGTH_SHORT).show());
 
     }
 
