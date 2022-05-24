@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnSuccessListener(authResult -> {
-                startActivity(new Intent(LoginActivity.this, MapActivity.class));
+                startActivity(new Intent(LoginActivity.this, MapsActivity.class));
                 finish();
                 }).addOnFailureListener(e -> Snackbar.make(root, "Ошибка авторизации. " + e.getMessage(), Snackbar.LENGTH_SHORT).show());
 

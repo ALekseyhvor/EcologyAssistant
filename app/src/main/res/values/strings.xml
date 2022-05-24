@@ -11,4 +11,5 @@
     <string name="txt_loginac">Войти в аккаунт</string>
     <string name="txt_regbtn">Зарегистрироваться</string>
     <string name="txt_autbtn">Войти</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
