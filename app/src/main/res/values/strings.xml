@@ -12,4 +12,6 @@
     <string name="txt_regbtn">Зарегистрироваться</string>
     <string name="txt_autbtn">Войти</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="map_id">f9e1b3ac5b28706b</string>
+    <string name="maps_api_key">AIzaSyDteKnz2Zl9ivx2Qfm8FMQtH96Tngw2o_U</string>
 </resources>

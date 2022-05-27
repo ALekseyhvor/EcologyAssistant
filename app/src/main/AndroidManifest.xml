@@ -19,10 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcologyAssistant" >
 
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDteKnz2Zl9ivx2Qfm8FMQtH96Tngw2o_U" />
-
+            android:value="@string/maps_api_key" />
+        <activity
+            android:name=".RegistrationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MapsActivity"
             android:exported="false"
@@ -33,7 +37,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".WelcomeActivity"
             android:exported="true"
             android:screenOrientation="portrait" >
             <intent-filter>

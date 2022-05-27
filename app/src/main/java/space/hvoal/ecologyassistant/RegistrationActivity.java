@@ -47,12 +47,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
         root = findViewById(R.id.root_element);
 
-       loginacc = findViewById(R.id.textViewLoginAccaunt);
+        loginacc = findViewById(R.id.textViewLoginAccaunt);
 
-       loginacc.setOnClickListener(view -> {
-           Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-           startActivity(intent);
-       });
+        loginacc.setOnClickListener(view -> {
+            Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
 
         buttonreg = findViewById(R.id.buttonreg);
 
@@ -70,40 +70,40 @@ public class RegistrationActivity extends AppCompatActivity {
         final EditText email = findViewById(R.id.editTextEmailAddress);
         final EditText phone = findViewById(R.id.editTextNumberSigned);
         final EditText pass = findViewById(R.id.editTextPassword);
-            if (TextUtils.isEmpty(name.getText().toString())){
-                Snackbar.make(root, "Введите ваше имя", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(secondname.getText().toString())){
-                Snackbar.make(root, "Введите вашу фамилию", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(email.getText().toString())){
-                Snackbar.make(root, "Введите вашу почту", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(phone.getText().toString())){
-                Snackbar.make(root, "Введите ваш номер телефона", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            if (pass.getText().toString().length() < 8){
-                Snackbar.make(root, "Пароль должен быть длинне 8 символов", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
+        if (TextUtils.isEmpty(name.getText().toString())){
+            Snackbar.make(root, "Введите ваше имя", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(secondname.getText().toString())){
+            Snackbar.make(root, "Введите вашу фамилию", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(email.getText().toString())){
+            Snackbar.make(root, "Введите вашу почту", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(phone.getText().toString())){
+            Snackbar.make(root, "Введите ваш номер телефона", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (pass.getText().toString().length() < 8){
+            Snackbar.make(root, "Пароль должен быть длинне 8 символов", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
 
         // Регистрация пользователя
         auth.createUserWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnSuccessListener(authResult -> {
-                User user = new User();
-                user.setName(name.getText().toString());
-                user.setSecondname(secondname.getText().toString());
-                user.setEmail(email.getText().toString());
-                user.setPhone(phone.getText().toString());
-                user.setPassword(pass.getText().toString());
+                    User user = new User();
+                    user.setName(name.getText().toString());
+                    user.setSecondname(secondname.getText().toString());
+                    user.setEmail(email.getText().toString());
+                    user.setPhone(phone.getText().toString());
+                    user.setPassword(pass.getText().toString());
 
-                users.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
-                        .setValue(user)
-                        .addOnSuccessListener(unused -> Snackbar.make(root, "Регистрация прошла успешна!", Snackbar.LENGTH_SHORT).show());
+                    users.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                            .setValue(user)
+                            .addOnSuccessListener(unused -> Snackbar.make(root, "Регистрация прошла успешна!", Snackbar.LENGTH_SHORT).show());
                     startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
                     finish();
                 }).addOnFailureListener(e -> Snackbar.make(root, "Ошибка регистрации. " + e.getMessage(), Snackbar.LENGTH_SHORT).show());
