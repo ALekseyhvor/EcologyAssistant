@@ -86,7 +86,7 @@ public class RegistrationActivity extends AppCompatActivity {
             Snackbar.make(root, "Введите ваш номер телефона", Snackbar.LENGTH_SHORT).show();
             return;
         }
-        if (pass.getText().toString().length() < 8){
+        if (pass.getText().toString().length() < 7){
             Snackbar.make(root, "Пароль должен быть длинне 8 символов", Snackbar.LENGTH_SHORT).show();
             return;
         }

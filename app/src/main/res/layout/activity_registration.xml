@@ -15,7 +15,7 @@ tools:context=".RegistrationActivity">
     tools:ignore="ImageContrastCheck" />
 
 <TextView
-    android:layout_width="200dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="20dp"
     android:layout_centerHorizontal="true"
@@ -24,73 +24,73 @@ tools:context=".RegistrationActivity">
     android:textSize="30sp"
     android:gravity="center"/>
 
-<EditText
-    android:id="@+id/editTextName"
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="100dp"
-    android:layout_centerHorizontal="true"
-    android:ems="10"
-    android:hint="@string/txt_name"
-    android:hyphenationFrequency="none"
-    android:inputType="textPersonName"
-    android:minHeight="48dp"
-    android:textColorHint="#A7FFEB"
-    android:textSize="25sp"/>
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:ems="10"
+        android:hint="@string/txt_name"
+        android:hyphenationFrequency="none"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColorHint="#A7FFEB"
+        android:textSize="25sp" />
 
-<EditText
-    android:id="@+id/editTextSecondName"
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/editTextName"
-    android:layout_centerInParent="true"
-    android:layout_marginTop="30dp"
-    android:ems="10"
-    android:hint="@string/txt_secondname"
-    android:inputType="textPersonName"
-    android:minHeight="48dp"
-    android:textColorHint="#A7FFEB"
-    android:textSize="25sp" />
+    <EditText
+        android:id="@+id/editTextSecondName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextName"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="@string/txt_secondname"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:textColorHint="#A7FFEB"
+        android:textSize="25sp" />
 
-<EditText
-    android:id="@+id/editTextEmailAddress"
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
-    android:ems="10"
-    android:inputType="textEmailAddress"
-    android:layout_below="@+id/editTextSecondName"
-    android:hint="@string/txt_email"
-    android:layout_centerInParent="true"
-    android:textColorHint="#A7FFEB"
-    android:textSize="25sp"/>
+    <EditText
+        android:id="@+id/editTextEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextSecondName"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="@string/txt_email"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#A7FFEB"
+        android:textSize="25sp" />
 
-<EditText
-    android:id="@+id/editTextNumberSigned"
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="30dp"
-    android:ems="10"
-    android:inputType="numberSigned"
-    android:layout_below="@+id/editTextEmailAddress"
-    android:hint="@string/txt_number"
-    android:layout_centerInParent="true"
-    android:textColorHint="#A7FFEB"
-    android:textSize="25sp"/>
+    <EditText
+        android:id="@+id/editTextNumberSigned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextEmailAddress"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="@string/txt_number"
+        android:inputType="numberSigned"
+        android:textColorHint="#A7FFEB"
+        android:textSize="25sp" />
 
-<EditText
-    android:id="@+id/editTextPassword"
-    android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    android:ems="10"
-    android:inputType="textPassword"
-    android:layout_below="@+id/editTextNumberSigned"
-    android:layout_centerInParent="true"
-    android:layout_marginTop="30dp"
-    android:hint="@string/txt_password"
-    android:textColorHint="#A7FFEB"
-    android:minHeight="48dp"
-    android:textSize="25sp"/>
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextNumberSigned"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="@string/txt_password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:textColorHint="#A7FFEB"
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/buttonreg"
@@ -99,10 +99,9 @@ tools:context=".RegistrationActivity">
         android:layout_below="@+id/editTextPassword"
         android:layout_centerInParent="true"
         android:layout_marginTop="40dp"
-        android:text="@string/txt_regbtn"
-        android:textColor="#FFFF"
         android:background="@drawable/button_reg"
-        />
+        android:text="@string/txt_regbtn"
+        android:textColor="#FFFF" />
 
     <TextView
         android:id="@+id/textViewLoginAccaunt"
