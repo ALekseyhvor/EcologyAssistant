@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="space.hvoal.ecologyassistant" >
+    package="space.hvoal.ecologyassistant">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- разрешение для доступа в интернет -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- разрешение для доступа к Wi-Fi-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- разрешение для доступа к Wi-Fi -->
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" /> <!-- разрешение для доступа к сервисам Google -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- разрешение на определение местоположения -->
@@ -18,16 +18,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_eco_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.EcologyAssistant" >
-
+        android:theme="@style/Theme.EcologyAssistant">
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/maps_api_key" />
+
+        <activity
+            android:name=".MainPageActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RegistrationActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MapsActivity"
             android:exported="false"
@@ -40,7 +47,7 @@
         <activity
             android:name=".WelcomeActivity"
             android:exported="true"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

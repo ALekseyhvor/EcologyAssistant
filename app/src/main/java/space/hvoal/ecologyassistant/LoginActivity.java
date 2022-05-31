@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView createacc;
     private Button buttonaut;
-    private DatabaseReference users;
+    private DatabaseReference usersref;
     private FirebaseDatabase db;
     private FirebaseAuth auth;
     private RelativeLayout root;
@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         db = FirebaseDatabase.getInstance();
-        users = db.getReference("Users");
+        usersref = db.getReference("Users");
         auth = FirebaseAuth.getInstance();
 
         root = findViewById(R.id.root_elementaut);
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
         auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnSuccessListener(authResult -> {
-                startActivity(new Intent(LoginActivity.this, MapsActivity.class));
+                startActivity(new Intent(LoginActivity.this, MainPageActivity.class));
                 finish();
                 }).addOnFailureListener(e -> Snackbar.make(root, "Ошибка авторизации. " + e.getMessage(), Snackbar.LENGTH_SHORT).show());
 
