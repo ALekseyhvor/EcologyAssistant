@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainPageActivity extends AppCompatActivity {
 
-   private Button buttonprofile, buttondialog, buttonmap, buttonlogaut;
+   private Button buttonprofile, buttondialog, buttonmap, buttonlogaut, buttonmydialog, buttoncreatedialog;
    private FirebaseAuth lauth;
    private FirebaseUser currentuser;
 
@@ -31,39 +31,48 @@ public class MainPageActivity extends AppCompatActivity {
 
 
         buttonprofile = findViewById(R.id.buttonprofile);
+        buttoncreatedialog = findViewById(R.id.buttoncreatedialog);
         buttondialog = findViewById(R.id.buttondialog);
+        buttonmydialog = findViewById(R.id.buttonmydialog);
         buttonmap = findViewById(R.id.buttonmap);
         buttonlogaut = findViewById(R.id.buttonlogaut);
 
 
-        buttonmap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent mapintent = new Intent(MainPageActivity.this, MapsActivity.class);
-                startActivity(mapintent);
-                finish();
-            }
+        buttonmap.setOnClickListener(view -> {
+            Intent mapintent = new Intent(MainPageActivity.this, MapsActivity.class);
+            startActivity(mapintent);
+            finish();
         });
 
-        buttonlogaut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                lauth.signOut();
+        buttonlogaut.setOnClickListener(view -> {
+            lauth.signOut();
 
-                logautUser();
-            }
+            logautUser();
         });
 
-        buttonprofile.setOnClickListener(new View.OnClickListener() {
+        buttonprofile.setOnClickListener(view -> {
+            Intent prointent = new Intent(MainPageActivity.this, ProfileActivity.class);
+            startActivity(prointent);
+            finish();
+        });
+
+        buttondialog.setOnClickListener(view -> {
+            Intent dialogintent = new Intent(MainPageActivity.this, DisscusionActivity.class);
+            startActivity(dialogintent);
+            finish();
+        });
+
+        buttoncreatedialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent prointent = new Intent(MainPageActivity.this, ProfileActivity.class);
-                startActivity(prointent);
+                Intent createprojectintent = new Intent(MainPageActivity.this, CreateProjectActivity.class);
+                startActivity(createprojectintent);
                 finish();
             }
         });
 
     }
+
 
     private void logautUser() {
 

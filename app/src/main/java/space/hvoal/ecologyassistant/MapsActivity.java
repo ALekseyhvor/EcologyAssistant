@@ -8,12 +8,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -42,6 +45,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Location mylocation;
     private LocationRequest locationRequest;
     private boolean locationPermissionGranted = false;
+    private ImageView backbtn;
+    private UiSettings uiSettings;
+
 
 
     @Override
@@ -64,12 +70,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getLocationPermission();
 
 
-    }
+        backbtn = findViewById(R.id.back_button);
+        backbtn.setOnClickListener(view -> {
+            Intent mainintent = new Intent(MapsActivity.this, MainPageActivity.class);
+            startActivity(mainintent);
+            finish();
+        });
 
+    }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        uiSettings = mMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
 
 
         buildGoogleApiClient();

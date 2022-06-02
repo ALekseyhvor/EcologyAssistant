@@ -12,11 +12,18 @@
     <string name="txt_regbtn">Зарегистрироваться</string>
     <string name="txt_autbtn">Войти</string>
     <string name="txt_prbtn">Профиль</string>
-    <string name="txt_obbtn">Обсуждения</string>
+    <string name="txt_obbtn">Обсуждения проектов</string>
+    <string name="txt_obmybtn">Мои проекты</string>
     <string name="txt_mapbtn">Карта</string>
     <string name="txt_exitbtn">Выйти</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="map_id">f9e1b3ac5b28706b</string>
     <string name="maps_api_key">AIzaSyDteKnz2Zl9ivx2Qfm8FMQtH96Tngw2o_U</string>
     <string name="txt_save_change">Сохранить изменения</string>
+    <string name="txt_mainText">Опишите ваш проект</string>
+    <string name="txt_createProject">Создать проект</string>
+    <string name="txt_timeProject">Дата</string>
+    <string name="txt_nameProject">Имя проекта</string>
+    <string name="txt_authorProject">Автор</string>
+    <string name="txt_submitProject">Предложить проект</string>
 </resources>

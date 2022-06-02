@@ -23,6 +23,24 @@
             android:textAllCaps="false"/>
 
         <Button
+            android:id="@+id/buttoncreatedialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_createProject"
+            android:background="@drawable/button_reg"
+            android:layout_marginTop="15dp"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/buttonmydialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_obmybtn"
+            android:background="@drawable/button_reg"
+            android:layout_marginTop="15dp"
+            android:textAllCaps="false"/>
+
+        <Button
             android:id="@+id/buttondialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

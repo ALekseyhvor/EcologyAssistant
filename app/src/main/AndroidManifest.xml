@@ -20,6 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcologyAssistant">
         <activity
+            android:name=".CreateProjectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DisscusionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
 

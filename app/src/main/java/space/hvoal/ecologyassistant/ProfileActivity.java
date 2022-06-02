@@ -48,23 +48,13 @@ public class ProfileActivity extends AppCompatActivity {
         root = findViewById(R.id.root_element_profile);
 
 
-        backbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent mainintent = new Intent(ProfileActivity.this, MainPageActivity.class);
-                startActivity(mainintent);
-                finish();
-            }
+        backbtn.setOnClickListener(view -> {
+            Intent mainintent = new Intent(ProfileActivity.this, MainPageActivity.class);
+            startActivity(mainintent);
+            finish();
         });
 
-        button_savedChange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                changeInfoController();
-
-            }
-        });
+        button_savedChange.setOnClickListener(view -> changeInfoController());
 
         getUserInformation();
 

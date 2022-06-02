@@ -22,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
+import space.hvoal.ecologyassistant.db.User;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private Button buttonreg;

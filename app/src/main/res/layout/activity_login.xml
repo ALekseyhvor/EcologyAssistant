@@ -60,7 +60,9 @@
         android:layout_marginTop="40dp"
         android:text="@string/txt_autbtn"
         android:textColor="#FFFF"
-        android:background="@drawable/button_reg" />
+        android:background="@drawable/button_reg"
+        android:textAllCaps="false"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/textViewCreateAccaunt"
