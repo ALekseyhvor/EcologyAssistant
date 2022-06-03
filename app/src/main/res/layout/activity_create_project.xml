@@ -64,7 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/txt_submitProject"
-            android:background="@drawable/button_reg"/>
+            android:background="@drawable/button_reg"
+            android:textAllCaps="false"/>
 
 
     </LinearLayout>

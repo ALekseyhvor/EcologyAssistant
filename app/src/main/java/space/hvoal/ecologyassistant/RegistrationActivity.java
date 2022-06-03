@@ -72,6 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
         final EditText email = findViewById(R.id.editTextEmailAddress);
         final EditText phone = findViewById(R.id.editTextNumberSigned);
         final EditText pass = findViewById(R.id.editTextPassword);
+
         if (TextUtils.isEmpty(name.getText().toString())){
             Snackbar.make(root, "Введите ваше имя", Snackbar.LENGTH_SHORT).show();
             return;

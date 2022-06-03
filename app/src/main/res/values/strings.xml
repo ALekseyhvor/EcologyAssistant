@@ -26,4 +26,6 @@
     <string name="txt_nameProject">Имя проекта</string>
     <string name="txt_authorProject">Автор</string>
     <string name="txt_submitProject">Предложить проект</string>
+    <string name="txt_like">Мне нравится:</string>
+    <string name="txt_comment">Комментарии:</string>
 </resources>
