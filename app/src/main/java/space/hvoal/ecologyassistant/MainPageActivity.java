@@ -71,6 +71,12 @@ public class MainPageActivity extends AppCompatActivity {
             }
         });
 
+        buttonmydialog.setOnClickListener(view -> {
+            Intent mydialogintent = new Intent(MainPageActivity.this, MyProjectActivity.class);
+            startActivity(mydialogintent);
+            finish();
+        });
+
     }
 
 

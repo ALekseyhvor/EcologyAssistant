@@ -9,6 +9,8 @@ public class Project {
     private String nameproject, textproject, creationdate;
     private Long countcommm, countlike;
 
+    public Project() {}
+
     public Project(String author, Long id, String nameproject, String textproject, String creationdate, Long countcommm, Long countlike) {
         this.author = author;
         this.id = id;
@@ -80,7 +82,7 @@ public class Project {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-        return author.equals(project.author) && id.equals(project.id) && nameproject.equals(project.nameproject) && textproject.equals(project.textproject) && creationdate.equals(project.creationdate) && countcommm.equals(project.countcommm) && countlike.equals(project.countlike);
+        return author.equals(project.author) && id.equals(project.id) && nameproject.equals(project.nameproject) && textproject.equals(project.textproject) && creationdate.equals(project.creationdate) && Objects.equals(countcommm, project.countcommm) && Objects.equals(countlike, project.countlike);
     }
 
     @Override

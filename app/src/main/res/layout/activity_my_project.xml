@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root_element_crproject"
-    tools:context=".DisscusionActivity">
+    tools:context=".MyProjectActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -37,39 +36,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:orientation="vertical">
 
-
-        <EditText
-            android:id="@+id/editNameProject"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleMyView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/txt_nameProject"
-            android:inputType="textPersonName"
-            android:minHeight="48dp" />
+            android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/editMainTheme"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:minHeight="100dp"
-            android:hint="@string/txt_mainText" />
-
-        <Button
-            android:id="@+id/buttonCreateProject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/txt_submitProject"
-            android:background="@drawable/button_reg"
-            android:textAllCaps="false"/>
-
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 
 
 </RelativeLayout>
+

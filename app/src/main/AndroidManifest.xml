@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcologyAssistant">
         <activity
+            android:name=".MyProjectActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".CreateProjectActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
