@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,17 +29,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import space.hvoal.ecologyassistant.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener {
 
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1 ;
+    private final LatLng TBO = new LatLng(56.3244173138468, 43.561795958149865);
+    private final LatLng GAZ = new LatLng(56.29802514982602, 43.68190159040703);
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private GoogleApiClient googleApiClient;
@@ -47,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean locationPermissionGranted = false;
     private ImageView backbtn;
     private UiSettings uiSettings;
+    private Marker markerTbo;
+    private Marker markerGaz;
 
 
 
@@ -94,14 +103,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
 
+        addMarkerOnMap();
+        addPolygonOnMap(googleMap);
+
+
+    }
+
+
+    public void addMarkerOnMap(){
+        markerTbo = mMap.addMarker(new MarkerOptions()
+                .position(TBO)
+                .title("Новый полигон ТБО МАГ-1")
+                .snippet("Россия, Нижегородская область, Дзержинск, 603901"));
+        assert markerTbo != null;
+        markerTbo.setTag(0);
+
+        markerGaz = mMap.addMarker(new MarkerOptions()
+                .position(GAZ)
+                .title("Полигон ООО «ГАЗ»")
+                .snippet("Дзержинск, Нижегородская обл., 606041"));
+        assert markerGaz != null;
+        markerGaz.setTag(0);
+
+        mMap.setOnMarkerClickListener(this);
+    }
+
+    public void addPolygonOnMap(@NonNull GoogleMap googleMap){
+
+        Polygon polygon1 = googleMap.addPolygon(new PolygonOptions()
+                .clickable(true)
+                .clickable(true)
+                .add(
+                        new LatLng(-27.457, 153.040),
+                        new LatLng(-33.852, 151.211),
+                        new LatLng(-37.813, 144.962),
+                        new LatLng(-34.928, 138.599)));
+        polygon1.setTag("alpha");
+
+    }
+
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        //Получаю данные из маркера
+        Integer clickCount = (Integer) marker.getTag();
+
+        if (clickCount != null) {
+            clickCount = clickCount + 1;
+            marker.setTag(clickCount);
+            Toast.makeText(this,
+                    marker.getTitle() +
+                            " Ваша оценка " + clickCount + " баллов.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return false;
     }
 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(1000);
-        locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Objects;
 
 import space.hvoal.ecologyassistant.db.Project;
+import space.hvoal.ecologyassistant.db.User;
 
 public class CreateProjectActivity extends AppCompatActivity {
 
@@ -90,7 +92,9 @@ public class CreateProjectActivity extends AppCompatActivity {
         project.setNameproject(nameproject.getText().toString());
         project.setTextproject(maintext.getText().toString());
 
-        projectRef.setValue(project)
+        projectRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                .child(project.getNameproject())
+                .setValue(project)
                 .addOnSuccessListener(unused -> Snackbar.make(root, "Ваш проект успешно опубликован!", Snackbar.LENGTH_SHORT).show());
         startActivity(new Intent(CreateProjectActivity.this, CreateProjectActivity.class));
         finish();

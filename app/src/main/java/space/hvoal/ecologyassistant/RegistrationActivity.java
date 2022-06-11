@@ -104,7 +104,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     user.setPhone(phone.getText().toString());
                     user.setPassword(pass.getText().toString());
 
-                    users.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+                    users.child((Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser())).getUid())
                             .setValue(user)
                             .addOnSuccessListener(unused -> Snackbar.make(root, "Регистрация прошла успешна!", Snackbar.LENGTH_SHORT).show());
                     startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));

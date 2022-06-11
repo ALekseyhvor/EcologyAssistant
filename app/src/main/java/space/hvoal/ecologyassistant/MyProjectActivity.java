@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 import space.hvoal.ecologyassistant.adapter.ProjectAdapter;
 import space.hvoal.ecologyassistant.db.Project;
@@ -56,20 +59,16 @@ public class MyProjectActivity extends AppCompatActivity {
         recyclerMyView.setAdapter(projectAdapter);
     }
 
-    private void loadProject() {
+   private void loadProject() {
         Collection<Project> project = getProject() ;
         projectAdapter.setItems(project);
     }
 
     private Collection<Project> getProject() {
         return Arrays.asList(
-                new Project("Papa", 1L,"Полнейший разъёб", "Приветсвтую всех сегодня я вам расскажу а не знаю что то толываиаолитылофваитфыволаитолфыатфыволатол",
-                        "2022-06-03 19:54:50 UTC", 4L, 545L),
-                new Project("Papa", 2L,"Полнейший разъёб2", "Приветсвтую всех сегодня я вам расскажу а не знаю что то толываиаолитылофваитфыволаитолфыатфыволатол",
-                        "2022-06-03 19:54:50 UTC", 454L, 567L),
-                new Project("Papa", 3L,"Полнейший разъёб3", "Приветсвтую всех сегодня я вам расскажу а не знаю что то толываиаолитылофваитфыволаитолфыатфыволатол",
-                        "2022-06-03 19:54:50 UTC", 44L, 555L)
+                new Project("Papa", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(),
+                        "Полнейший разъёб", "Приветсвтую всех сегодня я вам расскажу а не знаю что то толываиаолитылофваитфыволаитолфыатфыволатол",
+                        "2022-06-03 19:54:50 UTC", 4L, 545L)
         );
     }
-
 }

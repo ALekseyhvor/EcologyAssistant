@@ -1,7 +1,7 @@
 package space.hvoal.ecologyassistant.db;
 
 public class User {
-    public String name, secondname, email, phone, password;
+    private String name, secondname, email, phone, password;
 
     public User() {}
 

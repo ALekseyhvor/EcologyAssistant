@@ -4,16 +4,16 @@ package space.hvoal.ecologyassistant.db;
 import java.util.Objects;
 
 public class Project {
-    private String author;
-    private Long id;
-    private String nameproject, textproject, creationdate;
-    private Long countcommm, countlike;
+    public String author;
+    public String idproject;
+    public String nameproject, textproject, creationdate;
+    public Long countcommm, countlike;
 
     public Project() {}
 
-    public Project(String author, Long id, String nameproject, String textproject, String creationdate, Long countcommm, Long countlike) {
+    public Project(String author, String idproject, String nameproject, String textproject, String creationdate, Long countcommm, Long countlike) {
         this.author = author;
-        this.id = id;
+        this.idproject = idproject;
         this.nameproject = nameproject;
         this.textproject = textproject;
         this.creationdate = creationdate;
@@ -29,12 +29,12 @@ public class Project {
         this.author = author;
     }
 
-    public Long getId() {
-        return id;
+    public String getIdproject() {
+        return idproject;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdproject(String idproject) {
+        this.idproject = idproject;
     }
 
     public String getNameproject() {
@@ -82,11 +82,11 @@ public class Project {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
-        return author.equals(project.author) && id.equals(project.id) && nameproject.equals(project.nameproject) && textproject.equals(project.textproject) && creationdate.equals(project.creationdate) && Objects.equals(countcommm, project.countcommm) && Objects.equals(countlike, project.countlike);
+        return author.equals(project.author) && idproject.equals(project.idproject) && nameproject.equals(project.nameproject) && textproject.equals(project.textproject) && creationdate.equals(project.creationdate) && Objects.equals(countcommm, project.countcommm) && Objects.equals(countlike, project.countlike);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(author, id, nameproject, textproject, creationdate, countcommm, countlike);
+        return Objects.hash(author, idproject, nameproject, textproject, creationdate, countcommm, countlike);
     }
 }
