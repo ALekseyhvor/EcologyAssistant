@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -17,21 +18,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Автор" />
+                android:text="Автор"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/textNameProject"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Имя" />
+                android:text="Имя"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/textTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Дата" />
+                android:text="Дата"
+                android:textSize="15sp"/>
         </LinearLayout>
 
         <TextView
@@ -39,11 +43,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Описание проекта" />
+            android:text="Описание проекта"
+            android:textSize="20sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_marginStart="20dp">
 
 
@@ -52,7 +58,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:text="@string/txt_comment" />
+                android:text="@string/txt_comment"
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/count_comment"
@@ -60,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_weight="0"
-                android:text="0" />
+                android:text="0"
+                android:textSize="15sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,7 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/txt_like" />
+                    android:text="@string/txt_like"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/count_like"
@@ -81,7 +90,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_weight="0"
-                    android:text="0" />
+                    android:text="0"
+                    android:textSize="15sp"/>
 
             </LinearLayout>
 

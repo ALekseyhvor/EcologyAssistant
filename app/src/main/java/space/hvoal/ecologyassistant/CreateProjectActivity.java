@@ -1,18 +1,16 @@
 package space.hvoal.ecologyassistant;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationCompat;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,29 +19,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
-import space.hvoal.ecologyassistant.db.Project;
-import space.hvoal.ecologyassistant.db.User;
+
+
 
 public class CreateProjectActivity extends AppCompatActivity {
 
     private ImageView backbtn;
     private Button submit;
     private FirebaseDatabase db;
+    private FirebaseAuth auth;
     private DatabaseReference projectRef;
     private RelativeLayout root;
     private NotificationManager nm;
     private final int NOTIFICATION_ID = 1;
     private final String CHANNEL_ID = "CHANNEL_ID";
+    private String author, nameP, mainP, saveCurrentDate, saveCurrentTime, projectKey;
+    private EditText nameproject,maintext, authortext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +59,21 @@ public class CreateProjectActivity extends AppCompatActivity {
 
 
         db = FirebaseDatabase.getInstance();
-        projectRef = db.getReference("Projects");
+        auth = FirebaseAuth.getInstance();
+        projectRef = db.getReference().child("Projects");
 
         backbtn = findViewById(R.id.back_button);
         submit = findViewById(R.id.buttonCreateProject);
         root = findViewById(R.id.root_element_crproject);
+        authortext = findViewById(R.id.editTextAuthor);
+        nameproject = findViewById(R.id.editNameProject);
+        maintext = findViewById(R.id.editMainTheme);
 
         submit.setOnClickListener(view -> {
             writerProject();
             showNotification();
+            startActivity(new Intent(CreateProjectActivity.this, CreateProjectActivity.class));
+            finish();
         });
 
         backbtn.setOnClickListener(view -> {
@@ -77,27 +87,57 @@ public class CreateProjectActivity extends AppCompatActivity {
     }
 
     private void writerProject(){
-        final EditText nameproject = findViewById(R.id.editNameProject);
-        final EditText maintext = findViewById(R.id.editMainTheme);
-        if (TextUtils.isEmpty(nameproject.getText().toString())){
+
+        author = authortext.getText().toString();
+        nameP = nameproject.getText().toString();
+        mainP = maintext.getText().toString();
+
+        if (TextUtils.isEmpty(author)){
+            Snackbar.make(root, "Назовитесь", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(nameP)){
             Snackbar.make(root, "Введите название вашего проекта", Snackbar.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(maintext.getText().toString())){
+        if (TextUtils.isEmpty(mainP)){
             Snackbar.make(root, "Ваше описание проекта пустое", Snackbar.LENGTH_SHORT).show();
             return;
         }
 
-        Project project = new Project();
-        project.setNameproject(nameproject.getText().toString());
-        project.setTextproject(maintext.getText().toString());
+        projectInformation();
 
-        projectRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
-                .child(project.getNameproject())
-                .setValue(project)
-                .addOnSuccessListener(unused -> Snackbar.make(root, "Ваш проект успешно опубликован!", Snackbar.LENGTH_SHORT).show());
-        startActivity(new Intent(CreateProjectActivity.this, CreateProjectActivity.class));
-        finish();
+    }
+
+    private void projectInformation(){
+
+        Calendar calendar = Calendar.getInstance();
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMdd");
+        saveCurrentDate =  currentDate.format(calendar.getTime());
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat currentTime = new SimpleDateFormat("HHmm");
+        saveCurrentTime = currentTime.format(calendar.getTime());
+
+        projectKey = saveCurrentDate + saveCurrentTime;
+
+
+        saveProjectInformation();
+
+    }
+
+    private void saveProjectInformation(){
+        HashMap<String, Object> projectMap = new HashMap<>();
+        projectMap.put("id", projectKey);
+        projectMap.put("date", saveCurrentDate);
+        projectMap.put("time", saveCurrentTime);
+        projectMap.put("nameProject", nameP);
+        projectMap.put("description", mainP);
+        projectMap.put("author", author);
+
+        projectRef.child(projectKey).updateChildren(projectMap);
     }
 
 

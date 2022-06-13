@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +28,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,7 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GoogleMap.OnMarkerClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        com.google.android.gms.location.LocationListener {
+        LocationListener {
 
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1 ;
@@ -104,9 +104,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
 
         addMarkerOnMap();
-        addPolygonOnMap(googleMap);
+
+        Polygon polygon1 = googleMap.addPolygon(new PolygonOptions()
+                .clickable(true)
+                .clickable(true)
+                .add(
+                        new LatLng(56.260718, 44.006346),
+                        new LatLng(56.271952, 43.992891),
+                        new LatLng(56.289643, 43.999721),
+                        new LatLng(56.291820, 44.035414)));
+        polygon1.setTag("alpha");
+
+        Polygon polygon2 = googleMap.addPolygon(new PolygonOptions()
+                .clickable(true)
+                .clickable(true)
+                .add(
+                        new LatLng(56.267748, 43.915438),
+                        new LatLng(56.271758, 43.917911),
+                        new LatLng(56.267672, 43.925922),
+                        new LatLng(56.264681, 43.920930)));
+        polygon2.setTag("alpha");
 
 
+        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(@NonNull Polygon polygon) {
+                Toast.makeText(MapsActivity.this, "Hi, me baby bon", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -128,21 +153,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(this);
     }
 
-    public void addPolygonOnMap(@NonNull GoogleMap googleMap){
-
-        Polygon polygon1 = googleMap.addPolygon(new PolygonOptions()
-                .clickable(true)
-                .clickable(true)
-                .add(
-                        new LatLng(-27.457, 153.040),
-                        new LatLng(-33.852, 151.211),
-                        new LatLng(-37.813, 144.962),
-                        new LatLng(-34.928, 138.599)));
-        polygon1.setTag("alpha");
-
-    }
-
-
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         //Получаю данные из маркера
@@ -161,6 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
@@ -174,15 +185,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
@@ -249,6 +251,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
 }

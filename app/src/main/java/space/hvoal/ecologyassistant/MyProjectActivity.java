@@ -1,5 +1,6 @@
 package space.hvoal.ecologyassistant;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,24 +8,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
 
-import space.hvoal.ecologyassistant.adapter.ProjectAdapter;
-import space.hvoal.ecologyassistant.db.Project;
+import space.hvoal.ecologyassistant.model.Project;
+import space.hvoal.ecologyassistant.viewHolder.ProjectViewHolder;
 
 public class MyProjectActivity extends AppCompatActivity {
 
     private ImageView backbtn;
     private RecyclerView recyclerMyView;
-    private ProjectAdapter projectAdapter;
+    private FirebaseDatabase db;
+    private FirebaseAuth mAuth;
+    private DatabaseReference refProject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,12 @@ public class MyProjectActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //ночная тема выкл
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_project);
+
+
+        db = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
+        refProject = db.getReference().child("Projects");
 
 
 
@@ -46,7 +58,7 @@ public class MyProjectActivity extends AppCompatActivity {
 
 
         initRecyclerView();
-        loadProject();
+
 
     }
 
@@ -55,20 +67,37 @@ public class MyProjectActivity extends AppCompatActivity {
 
         recyclerMyView.setLayoutManager(new LinearLayoutManager(this));
 
-        projectAdapter = new ProjectAdapter();
-        recyclerMyView.setAdapter(projectAdapter);
     }
 
-   private void loadProject() {
-        Collection<Project> project = getProject() ;
-        projectAdapter.setItems(project);
-    }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-    private Collection<Project> getProject() {
-        return Arrays.asList(
-                new Project("Papa", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(),
-                        "Полнейший разъёб", "Приветсвтую всех сегодня я вам расскажу а не знаю что то толываиаолитылофваитфыволаитолфыатфыволатол",
-                        "2022-06-03 19:54:50 UTC", 4L, 545L)
-        );
+        FirebaseRecyclerOptions<Project> options = new FirebaseRecyclerOptions.Builder<Project>()
+                .setQuery(refProject, Project.class).build();
+
+        FirebaseRecyclerAdapter<Project, ProjectViewHolder> adapter = new FirebaseRecyclerAdapter<Project, ProjectViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ProjectViewHolder holder, int position, @NonNull Project model) {
+                holder.nameUserTextView.setText(model.getAuthor());
+                holder.nameprojectTextView.setText(model.getNameProject());
+                holder.creationdateTextView.setText(model.getDate());
+                holder.textprojectTextView.setText(model.getDescription());
+//                holder.commTextView.setText(model.getCountcomm());
+//                holder.likeTextView.setText(model.getCountlike());
+
+            }
+
+            @NonNull
+            @Override
+            public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item, parent, false);
+                return new ProjectViewHolder(view);
+            }
+        };
+
+        recyclerMyView.setAdapter(adapter);
+        adapter.startListening();
+
     }
 }

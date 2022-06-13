@@ -62,13 +62,10 @@ public class MainPageActivity extends AppCompatActivity {
             finish();
         });
 
-        buttoncreatedialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createprojectintent = new Intent(MainPageActivity.this, CreateProjectActivity.class);
-                startActivity(createprojectintent);
-                finish();
-            }
+        buttoncreatedialog.setOnClickListener(view -> {
+            Intent createprojectintent = new Intent(MainPageActivity.this, CreateProjectActivity.class);
+            startActivity(createprojectintent);
+            finish();
         });
 
         buttonmydialog.setOnClickListener(view -> {
@@ -81,7 +78,6 @@ public class MainPageActivity extends AppCompatActivity {
 
 
     private void logautUser() {
-
         Intent logintent = new Intent(MainPageActivity.this, LoginActivity.class);
         startActivity(logintent);
         finish();

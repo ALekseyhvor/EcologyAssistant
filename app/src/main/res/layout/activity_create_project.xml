@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root_element_crproject"
-    tools:context=".DisscusionActivity">
+    tools:context=".CreateProjectActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -43,6 +43,15 @@
 
 
         <EditText
+            android:id="@+id/editTextAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/txt_authorProject"
+            android:inputType="textPersonName"
+            android:minHeight="48dp" />
+
+        <EditText
             android:id="@+id/editNameProject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:minHeight="100dp"
             android:hint="@string/txt_mainText" />
 
