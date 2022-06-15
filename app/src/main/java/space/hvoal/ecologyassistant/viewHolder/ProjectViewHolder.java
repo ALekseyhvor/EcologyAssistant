@@ -1,11 +1,19 @@
 package space.hvoal.ecologyassistant.viewHolder;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import space.hvoal.ecologyassistant.DisscusionActivity;
 import space.hvoal.ecologyassistant.Interface.ItemClickListener;
 import space.hvoal.ecologyassistant.R;
 
@@ -19,6 +27,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
     public TextView likeTextView;
     public ItemClickListener listener;
 
+
     public ProjectViewHolder(@NonNull View itemView) {
         super(itemView);
 
@@ -28,6 +37,15 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
         textprojectTextView = itemView.findViewById(R.id.textMainView);
         commTextView = itemView.findViewById(R.id.count_comment);
         likeTextView = itemView.findViewById(R.id.count_like);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                int positionIndex = getAbsoluteAdapterPosition();
+//                Log.d(TAG, "onItemClick position: " + positionIndex);
+
+            }
+        });
 
     }
 
@@ -39,4 +57,6 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onClick(View view) {
         listener.onClick(view, getAbsoluteAdapterPosition(), false);
     }
+
+
 }

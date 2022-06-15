@@ -64,7 +64,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         Window w = getWindow();
-        w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); //скрываем нижнию панель
+        w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
@@ -129,7 +129,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(@NonNull Polygon polygon) {
-                Toast.makeText(MapsActivity.this, "Hi, me baby bon", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, "Экологическая зона", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -155,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
-        //Получаю данные из маркера
+
         Integer clickCount = (Integer) marker.getTag();
 
         if (clickCount != null) {

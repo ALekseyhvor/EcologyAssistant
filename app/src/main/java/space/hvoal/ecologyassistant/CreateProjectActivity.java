@@ -114,11 +114,11 @@ public class CreateProjectActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
 
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat currentDate = new SimpleDateFormat("MMdd");
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMMdd");
         saveCurrentDate =  currentDate.format(calendar.getTime());
 
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat currentTime = new SimpleDateFormat("HHmm");
+        SimpleDateFormat currentTime = new SimpleDateFormat("HHmmss");
         saveCurrentTime = currentTime.format(calendar.getTime());
 
         projectKey = saveCurrentDate + saveCurrentTime;

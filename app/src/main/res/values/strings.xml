@@ -28,4 +28,6 @@
     <string name="txt_submitProject">Предложить проект</string>
     <string name="txt_like">Мне нравится:</string>
     <string name="txt_comment">Комментарии:</string>
+    <string name="txt_send">Отправить</string>
+    <string name="txt_sendcomm">Оставить комментарий</string>
 </resources>

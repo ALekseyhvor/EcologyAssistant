@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -83,8 +84,6 @@ public class MyProjectActivity extends AppCompatActivity {
                 holder.nameprojectTextView.setText(model.getNameProject());
                 holder.creationdateTextView.setText(model.getDate());
                 holder.textprojectTextView.setText(model.getDescription());
-//                holder.commTextView.setText(model.getCountcomm());
-//                holder.likeTextView.setText(model.getCountlike());
 
             }
 

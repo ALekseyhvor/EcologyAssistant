@@ -46,7 +46,6 @@ public class MainPageActivity extends AppCompatActivity {
 
         buttonlogaut.setOnClickListener(view -> {
             lauth.signOut();
-
             logautUser();
         });
 

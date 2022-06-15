@@ -43,11 +43,36 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="wrap_content">
 
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/commentblock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/textComment"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="@string/txt_sendcomm"
+                android:inputType="textMultiLine"
+                tools:ignore="TextViewEdits" />
+
+            <Button
+                android:id="@+id/sendCommentBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@drawable/button_reg"
+                android:text="@string/txt_send"
+                android:textAllCaps="false" />
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -90,7 +90,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
         if (pass.getText().toString().length() < 7){
-            Snackbar.make(root, "Пароль должен быть длинне 8 символов", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(root, "Пароль должен быть длинне 7 символов", Snackbar.LENGTH_SHORT).show();
             return;
         }
 
