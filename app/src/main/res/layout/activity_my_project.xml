@@ -25,6 +25,7 @@
                     android:id="@+id/back_button"
                     android:layout_width="35dp"
                     android:layout_height="40dp"
+                    android:contentDescription="back button"
                     android:src="?attr/homeAsUpIndicator"
                     app:tint="@color/white" />
 
@@ -34,11 +35,32 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:orientation="vertical">
+        android:layout_marginTop="50dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Date" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="creationdate" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleMyView"
@@ -47,7 +69,7 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </RelativeLayout>

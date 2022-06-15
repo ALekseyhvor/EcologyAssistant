@@ -98,7 +98,7 @@ public class DisscusionActivity extends AppCompatActivity {
             @Override
             public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item, parent, false);
-                return new ProjectViewHolder(view);
+                return new ProjectViewHolder(view, false);
             }
         };
 

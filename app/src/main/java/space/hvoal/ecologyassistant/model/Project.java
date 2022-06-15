@@ -1,9 +1,12 @@
 package space.hvoal.ecologyassistant.model;
 
 
+import java.util.List;
+
 public class Project {
     private String id, date, time, nameProject, description, author;
     private int countcomm, countlike;
+    private List<String> subscribers;
 
     public Project() {}
 
@@ -16,6 +19,18 @@ public class Project {
         this.author = author;
         this.countcomm = countcomm;
         this.countlike = countlike;
+    }
+
+    public Project(String id, String date, String time, String nameProject, String description, String author, int countcomm, int countlike, List<String> subscribers) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.nameProject = nameProject;
+        this.description = description;
+        this.author = author;
+        this.countcomm = countcomm;
+        this.countlike = countlike;
+        this.subscribers = subscribers;
     }
 
     public String getId() {
@@ -80,5 +95,13 @@ public class Project {
 
     public void setCountlike(int countlike) {
         this.countlike = countlike;
+    }
+
+    public List<String> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<String> subscribers) {
+        this.subscribers = subscribers;
     }
 }

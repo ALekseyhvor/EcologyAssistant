@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 
 import com.google.android.material.snackbar.Snackbar;
@@ -29,9 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 
-
+import space.hvoal.ecologyassistant.model.Project;
+import space.hvoal.ecologyassistant.utils.ProjectWriter;
 
 
 public class CreateProjectActivity extends AppCompatActivity {
@@ -47,6 +46,7 @@ public class CreateProjectActivity extends AppCompatActivity {
     private final String CHANNEL_ID = "CHANNEL_ID";
     private String author, nameP, mainP, saveCurrentDate, saveCurrentTime, projectKey;
     private EditText nameproject,maintext, authortext;
+    private ProjectWriter projectWriter;
 
 
     @Override
@@ -83,7 +83,7 @@ public class CreateProjectActivity extends AppCompatActivity {
         });
 
         nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
+        projectWriter = new ProjectWriter();
     }
 
     private void writerProject(){
@@ -124,20 +124,20 @@ public class CreateProjectActivity extends AppCompatActivity {
         projectKey = saveCurrentDate + saveCurrentTime;
 
 
-        saveProjectInformation();
+        projectWriter.saveProjectInformation(
+//                String id, String date, String time, String nameProject, String description, String author, int countcomm, int countlike
+                new Project(
+                        projectKey,
+                        saveCurrentDate,
+                        saveCurrentTime,
+                        nameP,
+                        mainP,
+                        author,
+                        0,
+                        0
+                )
+        );
 
-    }
-
-    private void saveProjectInformation(){
-        HashMap<String, Object> projectMap = new HashMap<>();
-        projectMap.put("id", projectKey);
-        projectMap.put("date", saveCurrentDate);
-        projectMap.put("time", saveCurrentTime);
-        projectMap.put("nameProject", nameP);
-        projectMap.put("description", mainP);
-        projectMap.put("author", author);
-
-        projectRef.child(projectKey).updateChildren(projectMap);
     }
 
 
