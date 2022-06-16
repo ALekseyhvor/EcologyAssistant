@@ -38,13 +38,9 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
         commTextView = itemView.findViewById(R.id.count_comment);
         likeTextView = itemView.findViewById(R.id.count_like);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                int positionIndex = getAbsoluteAdapterPosition();
-//                Log.d(TAG, "onItemClick position: " + positionIndex);
-
-            }
+        itemView.setOnClickListener(view -> {
+            int positionIndex = getAbsoluteAdapterPosition();
+            Log.d(TAG, "onItemClick position: " + positionIndex);
         });
 
     }

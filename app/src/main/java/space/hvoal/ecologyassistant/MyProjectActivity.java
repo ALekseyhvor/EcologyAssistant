@@ -59,15 +59,11 @@ public class MyProjectActivity extends AppCompatActivity {
 
 
         initRecyclerView();
-
-
     }
 
     private void initRecyclerView(){
         recyclerMyView = findViewById(R.id.recycleMyView);
-
         recyclerMyView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
@@ -84,7 +80,6 @@ public class MyProjectActivity extends AppCompatActivity {
                 holder.nameprojectTextView.setText(model.getNameProject());
                 holder.creationdateTextView.setText(model.getDate());
                 holder.textprojectTextView.setText(model.getDescription());
-
             }
 
             @NonNull
