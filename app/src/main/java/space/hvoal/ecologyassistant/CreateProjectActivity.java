@@ -186,9 +186,19 @@ public class CreateProjectActivity extends AppCompatActivity {
                         .setContentIntent(pendingIntent)
                         .setTicker("Новое уведомление")
                         .setContentTitle("Новый проект")
-                        .setContentText("Вы создали новый проект");
+                        .setContentText("Вы создали новый проект")
+                        .setStyle(
+                                new NotificationCompat.BigTextStyle()
+                                        .bigText("Вы создали новый проект")
+                        );
+
+
         createChannelIfNeeded(nm);
-        nm.notify(NOTIFICATION_ID, notificationBuilder.build());
+        nm.notify(
+                NOTIFICATION_ID,
+                notificationBuilder
+                        .build()
+        );
 
     }
 
