@@ -20,12 +20,12 @@ public class ProjectWriter {
     public void saveProjectInformation(Project project) {
         HashMap<String, Object> projectMap = new HashMap<>();
         projectMap.put("id", project.getId());
-        projectMap.put("date", project.getDate());
-        projectMap.put("time", project.getTime());
+        projectMap.put("dateTime", project.getDateTime());
         projectMap.put("nameProject", project.getNameProject());
         projectMap.put("description", project.getDescription());
         projectMap.put("author", project.getAuthor());
         projectMap.put("subscribers", project.getSubscribers());
+        projectMap.put("comments", project.getComments());
 
         projectRef.child(project.getId()).updateChildren(projectMap);
     }

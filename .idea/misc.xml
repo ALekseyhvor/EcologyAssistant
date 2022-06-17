@@ -24,12 +24,22 @@
         <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/layout/registration.xml" value="0.386144578313253" />
         <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2055" />
         <entry key="..\:/Users/hvoro/AndroidStudioProjects/EcologyAssistant/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2055" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/drawable/button_reg.xml" value="0.172" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/drawable/ic_launcher_background.xml" value="0.172" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_chat.xml" value="0.3500905797101449" />
         <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_create_project.xml" value="0.36666666666666664" />
-        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_disscusion.xml" value="0.36666666666666664" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_disscusion.xml" value="0.5" />
         <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_main_page.xml" value="0.36666666666666664" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_maps.xml" value="0.15760869565217392" />
         <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_my_project.xml" value="0.36666666666666664" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_registration.xml" value="0.36666666666666664" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/activity_welcome.xml" value="0.36666666666666664" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/chat_item.xml" value="0.12962962962962962" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/content_scrolling.xml" value="0.3500905797101449" />
         <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/join_project.xml" value="0.36666666666666664" />
         <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/layout/project_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.172" />
+        <entry key="..\:/alarislabs/EcologyAssistant/app/src/main/res/mipmap-anydpi-v26/ic_launcher_eco.xml" value="0.151" />
       </map>
     </option>
   </component>

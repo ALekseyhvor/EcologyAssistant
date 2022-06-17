@@ -1,9 +1,5 @@
 package space.hvoal.ecologyassistant;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         nameChange = findViewById(R.id.editTextNameChange);
         secondNameChange = findViewById(R.id.editTextSecondNameChange);
-        numberChange= findViewById(R.id.editTextNumberSignedChange);
+        numberChange = findViewById(R.id.editTextNumberSignedChange);
         button_savedChange = findViewById(R.id.button_savedChange);
         backbtn = findViewById(R.id.back_button);
         root = findViewById(R.id.root_element_profile);
@@ -65,17 +65,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void changeInfoController(){
+    private void changeInfoController() {
 
-        if (TextUtils.isEmpty(nameChange.getText().toString())){
+        if (TextUtils.isEmpty(nameChange.getText().toString())) {
             Snackbar.make(root, "Заполните поле с  именем", Snackbar.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(secondNameChange.getText().toString())){
+        if (TextUtils.isEmpty(secondNameChange.getText().toString())) {
             Snackbar.make(root, "Заполните поле с фамилией", Snackbar.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(numberChange.getText().toString())){
+        if (TextUtils.isEmpty(numberChange.getText().toString())) {
             Snackbar.make(root, "Заполните поле с номером", Snackbar.LENGTH_SHORT).show();
             return;
         }
@@ -91,26 +91,29 @@ public class ProfileActivity extends AppCompatActivity {
         Snackbar.make(root, "Данные успешно изменены", Snackbar.LENGTH_SHORT).show();
     }
 
-    private void getUserInformation(){
-        usersref.child(Objects.requireNonNull(auth.getCurrentUser()).getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.getChildrenCount()>0){
+    private void getUserInformation() {
+        usersref.child(Objects.requireNonNull(auth.getCurrentUser()).getUid())
+                .addValueEventListener(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
 
-                    String name = Objects.requireNonNull(snapshot.child("name").getValue()).toString();
-                    String secondname = Objects.requireNonNull(snapshot.child("secondname").getValue()).toString();
-                    String phone = Objects.requireNonNull(snapshot.child("phone").getValue()).toString();
+                                    String name = Objects.requireNonNull(snapshot.child("name").getValue()).toString();
+                                    String secondname = Objects.requireNonNull(snapshot.child("secondname").getValue()).toString();
+                                    String phone = Objects.requireNonNull(snapshot.child("phone").getValue()).toString();
 
-                    nameChange.setText(name);
-                    secondNameChange.setText(secondname);
-                    numberChange.setText(phone);
-                }
-            }
+                                    nameChange.setText(name);
+                                    secondNameChange.setText(secondname);
+                                    numberChange.setText(phone);
+                                }
+                            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                            }
+                        }
+                );
     }
 }

@@ -1,5 +1,8 @@
 package space.hvoal.ecologyassistant.viewHolder;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,14 +14,14 @@ import space.hvoal.ecologyassistant.Interface.ItemClickListener;
 import space.hvoal.ecologyassistant.R;
 
 public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
     public TextView nameUserTextView;
     public TextView nameprojectTextView;
     public TextView creationdateTextView;
     public TextView textprojectTextView;
     public TextView commTextView;
-    public TextView likeTextView;
+    public TextView subscribersTextView;
     public Button joinButton;
+    public Button chatButton;
     public ItemClickListener listener;
 
 
@@ -30,25 +33,11 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
         creationdateTextView = itemView.findViewById(R.id.textTime);
         textprojectTextView = itemView.findViewById(R.id.textMainView);
         commTextView = itemView.findViewById(R.id.count_comment);
-        likeTextView = itemView.findViewById(R.id.count_like);
+        subscribersTextView = itemView.findViewById(R.id.count_subscribers);
         joinButton = itemView.findViewById(R.id.joinButton);
+        chatButton = itemView.findViewById(R.id.chatButton);
         int visible = selfProjects ? View.INVISIBLE : View.VISIBLE;
         joinButton.setVisibility(visible);
-
-        joinButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                }
-        );
-
-        itemView.setOnClickListener(view -> {
-            int positionIndex = getAbsoluteAdapterPosition();
-            Log.d(TAG, "onItemClick position: " + positionIndex);
-        });
-
     }
 
     public void setItemClickListner(ItemClickListener listener) {
@@ -59,6 +48,4 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onClick(View view) {
         listener.onClick(view, getAbsoluteAdapterPosition(), false);
     }
-
-
 }

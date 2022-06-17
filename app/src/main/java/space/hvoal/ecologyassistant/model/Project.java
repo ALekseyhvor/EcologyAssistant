@@ -4,33 +4,29 @@ package space.hvoal.ecologyassistant.model;
 import java.util.List;
 
 public class Project {
-    private String id, date, time, nameProject, description, author;
-    private int countcomm, countlike;
+    private String id, dateTime, nameProject, description, author;
     private List<String> subscribers;
+    private List<Comment> comments;
 
-    public Project() {}
-
-    public Project(String id, String date, String time, String nameProject, String description, String author, int countcomm, int countlike) {
-        this.id = id;
-        this.date = date;
-        this.time = time;
-        this.nameProject = nameProject;
-        this.description = description;
-        this.author = author;
-        this.countcomm = countcomm;
-        this.countlike = countlike;
+    public Project() {
     }
 
-    public Project(String id, String date, String time, String nameProject, String description, String author, int countcomm, int countlike, List<String> subscribers) {
+    public Project(String id, String datetime, String nameProject, String description, String author) {
         this.id = id;
-        this.date = date;
-        this.time = time;
+        this.dateTime = datetime;
         this.nameProject = nameProject;
         this.description = description;
         this.author = author;
-        this.countcomm = countcomm;
-        this.countlike = countlike;
+    }
+
+    public Project(String id, String datetime, String nameProject, String description, String author, List<String> subscribers, List<Comment> comments) {
+        this.id = id;
+        this.dateTime = datetime;
+        this.nameProject = nameProject;
+        this.description = description;
+        this.author = author;
         this.subscribers = subscribers;
+        this.comments = comments;
     }
 
     public String getId() {
@@ -41,20 +37,12 @@ public class Project {
         this.id = id;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getNameProject() {
@@ -81,27 +69,19 @@ public class Project {
         this.author = author;
     }
 
-    public int getCountcomm() {
-        return countcomm;
-    }
-
-    public void setCountcomm(int countcomm) {
-        this.countcomm = countcomm;
-    }
-
-    public int getCountlike() {
-        return countlike;
-    }
-
-    public void setCountlike(int countlike) {
-        this.countlike = countlike;
-    }
-
     public List<String> getSubscribers() {
         return subscribers;
     }
 
     public void setSubscribers(List<String> subscribers) {
         this.subscribers = subscribers;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

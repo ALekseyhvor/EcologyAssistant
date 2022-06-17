@@ -1,10 +1,6 @@
 package space.hvoal.ecologyassistant;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.NotificationCompat;
-
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,14 +16,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Objects;
+import java.util.UUID;
 
 import space.hvoal.ecologyassistant.model.Project;
 import space.hvoal.ecologyassistant.utils.ProjectWriter;
@@ -40,13 +46,19 @@ public class CreateProjectActivity extends AppCompatActivity {
     private FirebaseDatabase db;
     private FirebaseAuth auth;
     private DatabaseReference projectRef;
+    private DatabaseReference userRef;
     private RelativeLayout root;
     private NotificationManager nm;
     private final int NOTIFICATION_ID = 1;
     private final String CHANNEL_ID = "CHANNEL_ID";
-    private String author, nameP, mainP, saveCurrentDate, saveCurrentTime, projectKey;
-    private EditText nameproject,maintext, authortext;
+    private String author;
+    private String nameP;
+    private String mainP;
+    private String saveCurrentDate;
+    private String projectKey;
+    private EditText nameproject, maintext, authortext;
     private ProjectWriter projectWriter;
+    private FirebaseUser currentuser;
 
 
     @Override
@@ -61,6 +73,9 @@ public class CreateProjectActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         projectRef = db.getReference().child("Projects");
+        userRef = db.getReference().child("Users");
+        auth = FirebaseAuth.getInstance();
+        currentuser = auth.getCurrentUser();
 
         backbtn = findViewById(R.id.back_button);
         submit = findViewById(R.id.buttonCreateProject);
@@ -68,6 +83,29 @@ public class CreateProjectActivity extends AppCompatActivity {
         authortext = findViewById(R.id.editTextAuthor);
         nameproject = findViewById(R.id.editNameProject);
         maintext = findViewById(R.id.editMainTheme);
+
+        currentuser.getEmail();
+
+        userRef.child(Objects.requireNonNull(auth.getCurrentUser()).getUid())
+                .addValueEventListener(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
+
+                                    String name = Objects.requireNonNull(snapshot.child("name").getValue()).toString();
+                                    authortext.setText(name);
+                                    author = name;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        }
+                );
+        authortext.setEnabled(false);
 
         submit.setOnClickListener(view -> {
             writerProject();
@@ -86,21 +124,21 @@ public class CreateProjectActivity extends AppCompatActivity {
         projectWriter = new ProjectWriter();
     }
 
-    private void writerProject(){
+    private void writerProject() {
 
         author = authortext.getText().toString();
         nameP = nameproject.getText().toString();
         mainP = maintext.getText().toString();
 
-        if (TextUtils.isEmpty(author)){
+        if (TextUtils.isEmpty(author)) {
             Snackbar.make(root, "Назовитесь", Snackbar.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(nameP)){
+        if (TextUtils.isEmpty(nameP)) {
             Snackbar.make(root, "Введите название вашего проекта", Snackbar.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(mainP)){
+        if (TextUtils.isEmpty(mainP)) {
             Snackbar.make(root, "Ваше описание проекта пустое", Snackbar.LENGTH_SHORT).show();
             return;
         }
@@ -109,32 +147,24 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     }
 
-    private void projectInformation(){
+    private void projectInformation() {
 
         Calendar calendar = Calendar.getInstance();
 
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat currentDate = new SimpleDateFormat("MMMdd");
-        saveCurrentDate =  currentDate.format(calendar.getTime());
+        SimpleDateFormat currentDate = new SimpleDateFormat("yyyyMMddHHmmss");
+        saveCurrentDate = currentDate.format(calendar.getTime());
 
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat currentTime = new SimpleDateFormat("HHmmss");
-        saveCurrentTime = currentTime.format(calendar.getTime());
-
-        projectKey = saveCurrentDate + saveCurrentTime;
-
+        projectKey = UUID.randomUUID().toString();
 
         projectWriter.saveProjectInformation(
 //                String id, String date, String time, String nameProject, String description, String author, int countcomm, int countlike
                 new Project(
                         projectKey,
                         saveCurrentDate,
-                        saveCurrentTime,
                         nameP,
                         mainP,
-                        author,
-                        0,
-                        0
+                        author
                 )
         );
 
@@ -142,7 +172,7 @@ public class CreateProjectActivity extends AppCompatActivity {
 
 
     //Метод Push-уведомления
-    private void showNotification(){
+    private void showNotification() {
         Intent intent = new Intent(getApplicationContext(), MyProjectActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -157,8 +187,8 @@ public class CreateProjectActivity extends AppCompatActivity {
                         .setTicker("Новое уведомление")
                         .setContentTitle("Новый проект")
                         .setContentText("Вы создали новый проект");
-                        createChannelIfNeeded(nm);
-                        nm.notify(NOTIFICATION_ID, notificationBuilder.build());
+        createChannelIfNeeded(nm);
+        nm.notify(NOTIFICATION_ID, notificationBuilder.build());
 
     }
 

@@ -101,8 +101,8 @@ tools:context=".RegistrationActivity">
         android:layout_marginTop="40dp"
         android:background="@drawable/button_reg"
         android:text="@string/txt_regbtn"
-        android:textColor="#FFFF"
         android:textAllCaps="false"
+        android:textColor="#FFFF"
         android:textSize="20sp" />
 
     <TextView
