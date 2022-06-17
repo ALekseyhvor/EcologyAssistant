@@ -54,6 +54,10 @@
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ChatActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -67,6 +71,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

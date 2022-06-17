@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Автор"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/textNameProject"
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Имя"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/textTime"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Дата"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
         </LinearLayout>
 
         <TextView
@@ -44,55 +44,88 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Описание проекта"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="20dp">
-
-
-            <TextView
-                android:id="@+id/textComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/txt_comment"
-                android:textSize="15sp"/>
-
-            <TextView
-                android:id="@+id/count_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0"
-                android:text="0"
-                android:textSize="15sp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp">
 
 
                 <TextView
-                    android:id="@+id/textLike"
+                    android:id="@+id/textComment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:text="@string/txt_like"
-                    android:textSize="15sp"/>
+                    android:text="@string/txt_comment"
+                    android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/count_like"
+                    android:id="@+id/count_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_weight="0"
                     android:text="0"
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="100dp">
+
+
+                    <TextView
+                        android:id="@+id/textLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/txt_like"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/count_subscribers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="0"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/joinButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/button_reg"
+                    android:text="@string/txt_joinbtn"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFF"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/chatButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/button_reg"
+                    android:text="@string/txt_viewchat"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFF"
+                    android:textSize="20sp" />
             </LinearLayout>
 
         </LinearLayout>

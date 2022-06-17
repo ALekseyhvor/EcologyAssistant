@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyProjectActivity">
+    tools:context=".ChatActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -34,20 +34,6 @@
                         android:src="?attr/homeAsUpIndicator"
                         app:tint="@color/white" />
 
-                    <Switch
-                        android:id="@+id/switchDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/txt_newerup" />
-
-                    <Switch
-                        android:id="@+id/switchSubscribersCnt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/txt_popularup" />
-
                 </LinearLayout>
 
             </RelativeLayout>
@@ -56,20 +42,47 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleMyView"
+            android:id="@+id/chatRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp">
+
+            <EditText
+                android:id="@+id/editMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/button_reg"
+                android:text="@string/txt_sendchat"
+                android:textAllCaps="false"
+                android:textColor="#FFFF"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
-

@@ -17,8 +17,8 @@
     <string name="txt_mapbtn">Карта</string>
     <string name="txt_exitbtn">Выйти</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="map_id">f9e1b3ac5b28706b</string>
-    <string name="maps_api_key">AIzaSyDteKnz2Zl9ivx2Qfm8FMQtH96Tngw2o_U</string>
+<!--    <string name="map_id">f9e1b3ac5b28706b</string>-->
+    <string name="maps_api_key">AIzaSyDl-Yg-RVvDayl7i5MBR2WDhFK1qpMeucI</string>
     <string name="txt_save_change">Сохранить изменения</string>
     <string name="txt_mainText">Опишите ваш проект</string>
     <string name="txt_createProject">Создать проект</string>
@@ -26,8 +26,14 @@
     <string name="txt_nameProject">Имя проекта</string>
     <string name="txt_authorProject">Автор</string>
     <string name="txt_submitProject">Предложить проект</string>
-    <string name="txt_like">Мне нравится:</string>
+    <string name="txt_like">Подписчики:</string>
     <string name="txt_comment">Комментарии:</string>
     <string name="txt_send">Отправить</string>
     <string name="txt_sendcomm">Оставить комментарий</string>
+    <string name="txt_joinbtn">Присоединиться</string>
+    <string name="txt_joinconfirmbtn">OK</string>
+    <string name="txt_popularup">Наиболее популярные сверху</string>
+    <string name="txt_newerup">Cтарые серху</string>
+    <string name="txt_viewchat">Чат</string>
+    <string name="txt_sendchat">Отправить</string>
 </resources>

@@ -1,13 +1,5 @@
 package space.hvoal.ecologyassistant;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -17,6 +9,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,6 +33,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import space.hvoal.ecologyassistant.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -43,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
 
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1 ;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private final LatLng TBO = new LatLng(56.3244173138468, 43.561795958149865);
     private final LatLng GAZ = new LatLng(56.29802514982602, 43.68190159040703);
     private GoogleMap mMap;
@@ -56,7 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private UiSettings uiSettings;
     private Marker markerTbo;
     private Marker markerGaz;
-
 
 
     @Override
@@ -113,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         new LatLng(56.271952, 43.992891),
                         new LatLng(56.289643, 43.999721),
                         new LatLng(56.291820, 44.035414)));
-        polygon1.setTag("alpha");
+        polygon1.setTag("Polygon 1");
 
         Polygon polygon2 = googleMap.addPolygon(new PolygonOptions()
                 .clickable(true)
@@ -123,19 +124,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         new LatLng(56.271758, 43.917911),
                         new LatLng(56.267672, 43.925922),
                         new LatLng(56.264681, 43.920930)));
-        polygon2.setTag("alpha");
+        polygon2.setTag("Polygon 2");
 
 
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            Map<String, Integer> clickCntMap = new HashMap<>();
+
             @Override
             public void onPolygonClick(@NonNull Polygon polygon) {
                 Toast.makeText(MapsActivity.this, "Экологическая зона", Toast.LENGTH_LONG).show();
+                if (!clickCntMap.containsKey((String) polygon.getTag())) {
+                    clickCntMap.put((String) polygon.getTag(), 1);
+                } else {
+                    clickCntMap.put((String) polygon.getTag(), clickCntMap.get((String) polygon.getTag()) + 1);
+                }
+                Toast.makeText(
+                        MapsActivity.this,
+                        (String) polygon.getTag() +
+                                " Ваша оценка " + clickCntMap.get((String) polygon.getTag()) + " баллов.",
+                        Toast.LENGTH_SHORT
+                ).show();
             }
         });
     }
 
 
-    public void addMarkerOnMap(){
+    public void addMarkerOnMap() {
         markerTbo = mMap.addMarker(new MarkerOptions()
                 .position(TBO)
                 .title("Новый полигон ТБО МАГ-1")
@@ -171,8 +185,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         locationRequest = new LocationRequest();
@@ -188,14 +200,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-       mylocation = location;
+        mylocation = location;
 
-       LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-       mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-       mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
     }
-    protected synchronized void buildGoogleApiClient(){
+
+    protected synchronized void buildGoogleApiClient() {
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -209,7 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-                 locationPermissionGranted = true;
+            locationPermissionGranted = true;
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -248,10 +261,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mylocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
     @Override
     public void onConnectionSuspended(int i) {
 
