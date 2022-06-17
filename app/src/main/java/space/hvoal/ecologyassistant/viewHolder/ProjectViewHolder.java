@@ -44,13 +44,9 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
                 }
         );
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                int positionIndex = getAbsoluteAdapterPosition();
-//                Log.d(TAG, "onItemClick position: " + positionIndex);
-
-            }
+        itemView.setOnClickListener(view -> {
+            int positionIndex = getAbsoluteAdapterPosition();
+            Log.d(TAG, "onItemClick position: " + positionIndex);
         });
 
     }

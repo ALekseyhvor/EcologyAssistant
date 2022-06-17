@@ -30,9 +30,6 @@ import space.hvoal.ecologyassistant.viewHolder.ProjectViewHolder;
 public class DisscusionActivity extends AppCompatActivity {
 
     private ImageView backbtn;
-    public LinearLayout commlayout;
-    private EditText textComm;
-    private Button sendCommBtn;
     private RecyclerView recyclerView;
     private FirebaseDatabase db;
     private DatabaseReference refProject;
@@ -52,12 +49,6 @@ public class DisscusionActivity extends AppCompatActivity {
 
 
         backbtn = findViewById(R.id.back_button);
-        commlayout = findViewById(R.id.commentblock);
-        sendCommBtn = findViewById(R.id.sendCommentBtn);
-        textComm = findViewById(R.id.textComment);
-
-        commlayout.setVisibility(View.INVISIBLE);
-        commlayout.setEnabled(false);
 
 
         backbtn.setOnClickListener(view -> {

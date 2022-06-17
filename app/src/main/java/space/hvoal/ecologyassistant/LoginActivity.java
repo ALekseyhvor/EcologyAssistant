@@ -61,8 +61,8 @@ public class LoginActivity extends AppCompatActivity {
                 Snackbar.make(root, "Введите вашу почту", Snackbar.LENGTH_SHORT).show();
                 return;
             }
-            if (pass.getText().toString().length() < 8){
-                Snackbar.make(root, "Пароль должен быть длинне 8 символов", Snackbar.LENGTH_SHORT).show();
+            if (pass.getText().toString().length() < 7){
+                Snackbar.make(root, "Пароль должен быть длинне 7 символов", Snackbar.LENGTH_SHORT).show();
                 return;
             }
 

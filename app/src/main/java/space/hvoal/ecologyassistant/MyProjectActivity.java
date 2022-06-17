@@ -59,15 +59,11 @@ public class MyProjectActivity extends AppCompatActivity {
 
 
         initRecyclerView();
-
-
     }
 
     private void initRecyclerView(){
         recyclerMyView = findViewById(R.id.recycleMyView);
-
         recyclerMyView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
