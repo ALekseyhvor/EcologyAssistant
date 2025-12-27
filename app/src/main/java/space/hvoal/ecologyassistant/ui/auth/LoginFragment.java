@@ -64,7 +64,7 @@ public class LoginFragment extends Fragment {
         auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnSuccessListener(authResult ->
                         NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_login_to_mainStub)
+                                .navigate(R.id.action_login_to_main)
                 )
                 .addOnFailureListener(e ->
                         Snackbar.make(root, "Ошибка авторизации. " + e.getMessage(),

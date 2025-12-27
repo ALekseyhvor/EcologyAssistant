@@ -66,7 +66,7 @@ public class MyProjectActivity extends AppCompatActivity {
 
         refProject = db.getReference().child("Projects");
 
-        backbtn = findViewById(R.id.back_button);
+        //backbtn = findViewById(R.id.back_button);
         switchDate = findViewById(R.id.switchDate);
         switchSubscribersCnt = findViewById(R.id.switchSubscribersCnt);
 
@@ -88,11 +88,11 @@ public class MyProjectActivity extends AppCompatActivity {
                 }
         );
 
-        backbtn.setOnClickListener(view -> {
-            Intent mainintent = new Intent(MyProjectActivity.this, MainPageActivity.class);
-            startActivity(mainintent);
-            finish();
-        });
+//        backbtn.setOnClickListener(view -> {
+//            Intent mainintent = new Intent(MyProjectActivity.this, MainPageActivity.class);
+//            startActivity(mainintent);
+//            finish();
+//        });
 
         usersref.child(Objects.requireNonNull(auth.getCurrentUser()).getUid())
                 .addValueEventListener(

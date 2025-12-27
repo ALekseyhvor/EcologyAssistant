@@ -52,15 +52,15 @@ public class ProfileActivity extends AppCompatActivity {
         numberChange = findViewById(R.id.editTextNumberSignedChange);
 
         button_savedChange = findViewById(R.id.button_savedChange);
-        backbtn = findViewById(R.id.back_button);
+        //backbtn = findViewById(R.id.back_button);
 
         root = findViewById(R.id.root_element_profile);
 
-        backbtn.setOnClickListener(view -> {
-            Intent mainintent = new Intent(ProfileActivity.this, MainPageActivity.class);
-            startActivity(mainintent);
-            finish();
-        });
+//        backbtn.setOnClickListener(view -> {
+//            Intent mainintent = new Intent(ProfileActivity.this, MainPageActivity.class);
+//            startActivity(mainintent);
+//            finish();
+//        });
 
         button_savedChange.setOnClickListener(view -> changeInfoController());
 

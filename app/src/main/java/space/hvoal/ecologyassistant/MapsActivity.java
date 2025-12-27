@@ -80,12 +80,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getLocationPermission();
 
 
-        backbtn = findViewById(R.id.back_button);
-        backbtn.setOnClickListener(view -> {
-            Intent mainintent = new Intent(MapsActivity.this, MainPageActivity.class);
-            startActivity(mainintent);
-            finish();
-        });
+//        backbtn = findViewById(R.id.back_button);
+//        backbtn.setOnClickListener(view -> {
+//            Intent mainintent = new Intent(MapsActivity.this, MainPageActivity.class);
+//            startActivity(mainintent);
+//            finish();
+//        });
 
     }
 

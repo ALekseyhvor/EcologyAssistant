@@ -77,7 +77,7 @@ public class CreateProjectActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         currentuser = auth.getCurrentUser();
 
-        backbtn = findViewById(R.id.back_button);
+        //backbtn = findViewById(R.id.back_button);
         submit = findViewById(R.id.buttonCreateProject);
         root = findViewById(R.id.root_element_crproject);
         authortext = findViewById(R.id.editTextAuthor);
@@ -114,11 +114,11 @@ public class CreateProjectActivity extends AppCompatActivity {
             finish();
         });
 
-        backbtn.setOnClickListener(view -> {
+/*        backbtn.setOnClickListener(view -> {
             Intent mainintent = new Intent(CreateProjectActivity.this, MainPageActivity.class);
             startActivity(mainintent);
             finish();
-        });
+        });*/
 
         nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         projectWriter = new ProjectWriter();

@@ -14,8 +14,8 @@
             app:popUpTo="@id/welcomeFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_welcome_to_mainStub"
-            app:destination="@id/mainStubFragment"
+            android:id="@+id/action_welcome_to_main"
+            app:destination="@id/mainFragment"
             app:popUpTo="@id/welcomeFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -28,8 +28,8 @@
             android:id="@+id/action_login_to_registration"
             app:destination="@id/registrationFragment" />
         <action
-            android:id="@+id/action_login_to_mainStub"
-            app:destination="@id/mainStubFragment"
+            android:id="@+id/action_login_to_main"
+            app:destination="@id/mainFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -39,10 +39,9 @@
         android:name="space.hvoal.ecologyassistant.ui.auth.RegistrationFragment"
         android:label="Registration" />
 
-    <!-- временная заглушка вместо MainPage/BottomNav -->
     <fragment
-        android:id="@+id/mainStubFragment"
-        android:name="space.hvoal.ecologyassistant.ui.main.MainStubFragment"
+        android:id="@+id/mainFragment"
+        android:name="space.hvoal.ecologyassistant.ui.main.MainFragment"
         android:label="Main" />
 
 </navigation>

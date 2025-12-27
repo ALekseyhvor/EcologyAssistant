@@ -1,4 +1,4 @@
-package space.hvoal.ecologyassistant.ui.main;
+package space.hvoal.ecologyassistant.ui.tabs;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,17 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import space.hvoal.ecologyassistant.R;
 
-public class MainStubFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
-    public MainStubFragment() {
-        super(R.layout.fragment_main_stub);
-    }
+    public ProfileFragment() { super(R.layout.fragment_tab_profile); }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -27,10 +26,10 @@ public class MainStubFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
 
             NavOptions opts = new NavOptions.Builder()
-                    .setPopUpTo(R.id.mainStubFragment, true) // id из nav_root.xml
+                    .setPopUpTo(R.id.mainFragment, true) // id mainFragment из nav_root.xml
                     .build();
 
-            NavHostFragment.findNavController(MainStubFragment.this)
+            Navigation.findNavController(requireActivity(), R.id.nav_host)
                     .navigate(R.id.loginFragment, null, opts);
         });
     }

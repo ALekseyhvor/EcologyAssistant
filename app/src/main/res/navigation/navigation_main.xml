@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/discussionFragment">
+
+    <!-- ВКЛАДКИ (BottomNav) -->
+    <fragment
+        android:id="@+id/discussionFragment"
+        android:name="space.hvoal.ecologyassistant.ui.tabs.DiscussionFragment"
+        android:label="Проекты">
+
+        <!-- Переход на создание проекта (будет из FAB «+») -->
+        <action
+            android:id="@+id/action_projects_to_create"
+            app:destination="@id/createProjectFragment" />
+
+        <!-- Переход в чат проекта -->
+        <action
+            android:id="@+id/action_projects_to_chat"
+            app:destination="@id/chatFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="space.hvoal.ecologyassistant.ui.tabs.MapFragment"
+        android:label="Карта" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="space.hvoal.ecologyassistant.ui.tabs.ProfileFragment"
+        android:label="Профиль">
+
+        <!-- Мои проекты внутри профиля -->
+        <action
+            android:id="@+id/action_profile_to_my_projects"
+            app:destination="@id/myProjectsFragment" />
+    </fragment>
+
+    <!-- ВНУТРЕННИЕ ЭКРАНЫ (не вкладки) -->
+    <fragment
+        android:id="@+id/createProjectFragment"
+        android:name="space.hvoal.ecologyassistant.ui.tabs.CreateProjectFragment"
+        android:label="Создать проект" />
+
+    <fragment
+        android:id="@+id/myProjectsFragment"
+        android:name="space.hvoal.ecologyassistant.ui.tabs.MyProjectsFragment"
+        android:label="Мои проекты" />
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="space.hvoal.ecologyassistant.ui.chat.ChatFragment"
+        android:label="Чат">
+        <argument
+            android:name="projectId"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

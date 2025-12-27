@@ -33,7 +33,7 @@ public class WelcomeFragment extends Fragment {
             if (user == null) {
                 nav.navigate(R.id.action_welcome_to_login);
             } else {
-                nav.navigate(R.id.action_welcome_to_mainStub);
+                nav.navigate(R.id.action_welcome_to_main);
             }
         }, 1500);
     }

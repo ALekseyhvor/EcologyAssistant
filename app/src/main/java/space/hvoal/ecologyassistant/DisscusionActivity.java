@@ -68,7 +68,7 @@ public class DisscusionActivity extends AppCompatActivity {
         projectWriter = new ProjectWriter();
 
 
-        backbtn = findViewById(R.id.back_button);
+        //backbtn = findViewById(R.id.back_button);
         switchDate = findViewById(R.id.switchDate);
         switchSubscribersCnt = findViewById(R.id.switchSubscribersCnt);
 
@@ -91,11 +91,11 @@ public class DisscusionActivity extends AppCompatActivity {
         );
 
 
-        backbtn.setOnClickListener(view -> {
+        /*backbtn.setOnClickListener(view -> {
             Intent mainintent = new Intent(DisscusionActivity.this, MainPageActivity.class);
             startActivity(mainintent);
             finish();
-        });
+        });*/
 
         initRecyclerView();
 
