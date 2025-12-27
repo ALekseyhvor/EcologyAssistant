@@ -13,11 +13,13 @@ public class ProjectWriter {
     private DatabaseReference projectRef;
 
     public ProjectWriter() {
+
         db = FirebaseDatabase.getInstance();
         projectRef = db.getReference().child("Projects");
     }
 
     public void saveProjectInformation(Project project) {
+
         HashMap<String, Object> projectMap = new HashMap<>();
         projectMap.put("id", project.getId());
         projectMap.put("dateTime", project.getDateTime());

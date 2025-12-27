@@ -12,7 +12,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         Window w = getWindow();
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); //скрываем нижнию панель
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //ночная тема выкл
@@ -21,6 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Thread thread = new Thread() {
             @Override
             public void run() {
+
                 super.run();
                 {
                     try {
@@ -33,16 +36,14 @@ public class WelcomeActivity extends AppCompatActivity {
                         startActivity(logintent);
                     }
                 }
-
             }
         };
         thread.start();
-
-
     }
 
         @Override
         protected void onPause() {
+
             super.onPause();
             finish();
         }

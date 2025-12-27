@@ -31,7 +31,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         Window w = getWindow();
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); //скрываем нижнию панель
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //ночная тема выкл
@@ -54,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(){
+
         final EditText email = findViewById(R.id.editTextEmailAddressaut);
         final EditText pass = findViewById(R.id.editTextPasswordaut);
 
@@ -62,17 +65,18 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             if (pass.getText().toString().length() < 7){
-                Snackbar.make(root, "Пароль должен быть длинне 7 символов", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(root, "Пароль должен быть длиннеe 7 символов", Snackbar.LENGTH_SHORT).show();
                 return;
             }
 
         auth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnSuccessListener(authResult -> {
-                startActivity(new Intent(LoginActivity.this, MainPageActivity.class));
-                finish();
-                }).addOnFailureListener(e -> Snackbar.make(root, "Ошибка авторизации. " + e.getMessage(), Snackbar.LENGTH_SHORT).show());
-
-
+                    startActivity(new Intent(LoginActivity.this,
+                            MainPageActivity.class));
+                    finish();
+                }).addOnFailureListener(e -> Snackbar.make(
+                        root, "Ошибка авторизации. " + e.getMessage(),
+                        Snackbar.LENGTH_SHORT).show());
     }
 
 }

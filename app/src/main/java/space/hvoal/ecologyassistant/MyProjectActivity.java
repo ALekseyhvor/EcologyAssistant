@@ -50,10 +50,13 @@ public class MyProjectActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
         Window w = getWindow();
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); //скрываем нижнию панель
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //ночная тема выкл
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_my_project);
 
 
@@ -102,13 +105,9 @@ public class MyProjectActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
+                            public void onCancelled(@NonNull DatabaseError error) {}
                         }
                 );
-
-
         initRecyclerView();
     }
 
@@ -119,6 +118,7 @@ public class MyProjectActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+
         super.onStart();
 
         Query query = refProject.equalTo(username, "author");

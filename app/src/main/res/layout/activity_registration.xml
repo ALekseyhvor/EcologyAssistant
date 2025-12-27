@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:id="@+id/root_element"
-android:gravity="center"
-tools:context=".RegistrationActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_element"
+    android:gravity="center"
+    tools:context=".RegistrationActivity">
 
 <ImageView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
-    android:src="@drawable/background1"
+    android:src="@drawable/ea_registration"
     tools:ignore="ImageContrastCheck" />
-
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:layout_centerHorizontal="true"
-    android:text="@string/txt_reg"
-    android:textColor="#A7FFEB"
-    android:textSize="30sp"
-    android:gravity="center"/>
 
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="274dp"
         android:ems="10"
         android:hint="@string/txt_name"
         android:hyphenationFrequency="none"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:textSize="25sp" />
 
     <EditText
@@ -49,7 +40,7 @@ tools:context=".RegistrationActivity">
         android:hint="@string/txt_secondname"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:textSize="25sp" />
 
     <EditText
@@ -62,7 +53,7 @@ tools:context=".RegistrationActivity">
         android:ems="10"
         android:hint="@string/txt_email"
         android:inputType="textEmailAddress"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:textSize="25sp" />
 
     <EditText
@@ -75,7 +66,7 @@ tools:context=".RegistrationActivity">
         android:ems="10"
         android:hint="@string/txt_number"
         android:inputType="numberSigned"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:textSize="25sp" />
 
     <EditText
@@ -89,7 +80,7 @@ tools:context=".RegistrationActivity">
         android:hint="@string/txt_password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:textSize="25sp" />
 
     <Button
@@ -103,7 +94,8 @@ tools:context=".RegistrationActivity">
         android:text="@string/txt_regbtn"
         android:textAllCaps="false"
         android:textColor="#FFFF"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:backgroundTint="@null"/>
 
     <TextView
         android:id="@+id/textViewLoginAccaunt"
@@ -113,7 +105,7 @@ tools:context=".RegistrationActivity">
         android:layout_below="@+id/buttonreg"
         android:layout_centerHorizontal="true"
         android:text="@string/txt_loginac"
-        android:textColor="#A7FFEB"
+        android:textColor="#555555"
         android:textSize="20sp"
         android:gravity="center"/>
 

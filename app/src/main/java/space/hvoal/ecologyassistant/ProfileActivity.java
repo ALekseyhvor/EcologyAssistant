@@ -36,7 +36,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         Window w = getWindow();
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -48,10 +50,11 @@ public class ProfileActivity extends AppCompatActivity {
         nameChange = findViewById(R.id.editTextNameChange);
         secondNameChange = findViewById(R.id.editTextSecondNameChange);
         numberChange = findViewById(R.id.editTextNumberSignedChange);
+
         button_savedChange = findViewById(R.id.button_savedChange);
         backbtn = findViewById(R.id.back_button);
-        root = findViewById(R.id.root_element_profile);
 
+        root = findViewById(R.id.root_element_profile);
 
         backbtn.setOnClickListener(view -> {
             Intent mainintent = new Intent(ProfileActivity.this, MainPageActivity.class);
@@ -110,9 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
+                            public void onCancelled(@NonNull DatabaseError error) {}
                         }
                 );
     }

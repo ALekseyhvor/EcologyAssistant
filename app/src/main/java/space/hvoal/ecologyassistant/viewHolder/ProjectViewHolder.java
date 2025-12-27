@@ -26,6 +26,7 @@ public class ProjectViewHolder extends RecyclerView.ViewHolder implements View.O
 
 
     public ProjectViewHolder(@NonNull View itemView, boolean selfProjects) {
+
         super(itemView);
 
         nameUserTextView = itemView.findViewById(R.id.textNameAuthor);

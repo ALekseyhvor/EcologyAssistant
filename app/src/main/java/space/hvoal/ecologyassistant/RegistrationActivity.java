@@ -36,12 +36,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         Window w = getWindow();
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); //скрываем нижнию панель
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //ночная тема выкл
         setContentView(R.layout.activity_registration);
-
 
         db = FirebaseDatabase.getInstance();
         users = db.getReference("Users");
@@ -50,16 +51,14 @@ public class RegistrationActivity extends AppCompatActivity {
         root = findViewById(R.id.root_element);
 
         loginacc = findViewById(R.id.textViewLoginAccaunt);
-
         loginacc.setOnClickListener(view -> {
-            Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+            Intent intent = new Intent(RegistrationActivity.this,
+                    LoginActivity.class);
             startActivity(intent);
         });
 
         buttonreg = findViewById(R.id.buttonreg);
-
         buttonreg.setOnClickListener(view -> register());
-
     }
 
 
@@ -90,7 +89,7 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
         if (pass.getText().toString().length() < 7){
-            Snackbar.make(root, "Пароль должен быть длинне 7 символов", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(root, "Пароль должен быть длиннеe 7 символов", Snackbar.LENGTH_SHORT).show();
             return;
         }
 

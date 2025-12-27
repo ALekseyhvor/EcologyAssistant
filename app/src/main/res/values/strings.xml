@@ -7,7 +7,7 @@
     <string name="txt_email">Почта</string>
     <string name="txt_reg">Регистрация</string>
     <string name="txt_aut">Авторизация</string>
-    <string name="txt_createac">Создать аккаунт</string>
+    <string name="txt_createac">Зарегестрироваться</string>
     <string name="txt_loginac">Войти в аккаунт</string>
     <string name="txt_regbtn">Зарегистрироваться</string>
     <string name="txt_autbtn">Войти</string>
@@ -36,4 +36,6 @@
     <string name="txt_newerup">Cтарые серху</string>
     <string name="txt_viewchat">Чат</string>
     <string name="txt_sendchat">Отправить</string>
+    <string name="background_image">Приветсвенное изображение</string>
+    <string name="ea_login_image">Бэк на экран входа</string>
 </resources>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_elementaut"
     android:gravity="center"
     tools:context=".LoginActivity">
@@ -10,43 +11,36 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/ea_login_image"
         android:scaleType="centerCrop"
-        android:src="@drawable/backlog"
+        android:src="@drawable/ea_login"
         tools:ignore="ImageContrastCheck" />
-
-    <TextView
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:text="@string/txt_aut"
-        android:textColor="#A7FFEB"
-        android:textSize="30sp"
-        android:gravity="center"/>
 
     <EditText
         android:id="@+id/editTextEmailAddressaut"
-        android:layout_width="200dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
+        android:importantForAutofill="no"
         android:ems="10"
         android:inputType="textEmailAddress"
         android:hint="@string/txt_email"
         android:layout_centerInParent="true"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:textSize="25sp"/>
 
     <EditText
         android:id="@+id/editTextPasswordaut"
-        android:layout_width="200dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:importantForAutofill="no"
         android:inputType="textPassword"
         android:layout_below="@+id/editTextEmailAddressaut"
         android:layout_centerInParent="true"
         android:layout_marginTop="30dp"
         android:hint="@string/txt_password"
-        android:textColorHint="#A7FFEB"
+        android:textColorHint="#555555"
         android:minHeight="48dp"
         android:textSize="25sp"/>
 
@@ -57,24 +51,25 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPasswordaut"
         android:layout_centerInParent="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:text="@string/txt_autbtn"
         android:textColor="#FFFF"
         android:background="@drawable/button_reg"
         android:textAllCaps="false"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        app:backgroundTint="@null"
+        />
 
     <TextView
         android:id="@+id/textViewCreateAccaunt"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="150dp"
         android:layout_below="@+id/buttonautorization"
         android:layout_centerHorizontal="true"
         android:text="@string/txt_createac"
-        android:textColor="#A7FFEB"
+        android:textColor="#555555"
         android:textSize="20sp"
         android:gravity="center"/>
-
 
 </RelativeLayout>

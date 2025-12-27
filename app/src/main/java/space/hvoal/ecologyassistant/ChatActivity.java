@@ -43,7 +43,6 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView chatRecyclerView;
     private Button sendButton;
     private EditText editMessageText;
-
     private FirebaseAuth auth;
     private FirebaseDatabase db;
     private DatabaseReference refProject;
@@ -54,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Window w = getWindow();
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
