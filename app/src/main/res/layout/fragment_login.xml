@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_elementaut"
     android:gravity="center"
-    tools:context=".LoginActivity">
+    tools:context="space.hvoal.ecologyassistant.ui.auth.LoginFragment">
 
     <ImageView
         android:layout_width="match_parent"

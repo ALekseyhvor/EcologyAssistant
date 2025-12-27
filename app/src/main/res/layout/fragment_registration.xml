@@ -6,14 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_element"
     android:gravity="center"
-    tools:context=".RegistrationActivity">
+    tools:context="space.hvoal.ecologyassistant.ui.auth.RegistrationFragment">
 
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scaleType="centerCrop"
-    android:src="@drawable/ea_registration"
-    tools:ignore="ImageContrastCheck" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ea_registration"
+        tools:ignore="ImageContrastCheck" />
 
     <EditText
         android:id="@+id/editTextName"

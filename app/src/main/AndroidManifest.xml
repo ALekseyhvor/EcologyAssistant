@@ -19,6 +19,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcologyAssistant">
         <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".MyProjectActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -44,10 +53,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegistrationActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps"
@@ -56,20 +61,6 @@
             android:name=".ChatActivity"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".WelcomeActivity"
-            android:exported="true"
-            android:screenOrientation="fullSensor">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
     </application>
 

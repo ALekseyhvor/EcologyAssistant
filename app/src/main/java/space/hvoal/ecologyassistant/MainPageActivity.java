@@ -46,7 +46,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         buttonlogaut.setOnClickListener(view -> {
             lauth.signOut();
-            logautUser();
+            //logautUser();
         });
 
         buttonprofile.setOnClickListener(view -> {
@@ -76,11 +76,13 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
 
+/*
     private void logautUser() {
         Intent logintent = new Intent(MainPageActivity.this, LoginActivity.class);
         startActivity(logintent);
         finish();
     }
+*/
 
 
 }

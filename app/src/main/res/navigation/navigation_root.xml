@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_root"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="space.hvoal.ecologyassistant.ui.welcome.WelcomeFragment"
+        android:label="Welcome">
+        <action
+            android:id="@+id/action_welcome_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_welcome_to_mainStub"
+            app:destination="@id/mainStubFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="space.hvoal.ecologyassistant.ui.auth.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_login_to_registration"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_login_to_mainStub"
+            app:destination="@id/mainStubFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="space.hvoal.ecologyassistant.ui.auth.RegistrationFragment"
+        android:label="Registration" />
+
+    <!-- временная заглушка вместо MainPage/BottomNav -->
+    <fragment
+        android:id="@+id/mainStubFragment"
+        android:name="space.hvoal.ecologyassistant.ui.main.MainStubFragment"
+        android:label="Main" />
+
+</navigation>
