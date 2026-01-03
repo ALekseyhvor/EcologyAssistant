@@ -31,5 +31,13 @@ public class MainFragment extends Fragment {
         NavController navController = navHost.getNavController();
 
         NavigationUI.setupWithNavController(bottomNav, navController);
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            int id = destination.getId();
+            boolean show = (id == R.id.discussionFragment
+                    || id == R.id.mapFragment
+                    || id == R.id.profileFragment);
+            bottomNav.setVisibility(show ? View.VISIBLE : View.GONE);
+        });
     }
 }

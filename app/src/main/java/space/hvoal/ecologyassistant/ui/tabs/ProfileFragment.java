@@ -26,11 +26,17 @@ public class ProfileFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
 
             NavOptions opts = new NavOptions.Builder()
-                    .setPopUpTo(R.id.mainFragment, true) // id mainFragment из nav_root.xml
+                    .setPopUpTo(R.id.mainFragment, true)
                     .build();
 
             Navigation.findNavController(requireActivity(), R.id.nav_host)
                     .navigate(R.id.loginFragment, null, opts);
         });
+
+        view.findViewById(R.id.btnMyProjects).setOnClickListener(v ->
+                androidx.navigation.fragment.NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_profile_to_my_projects)
+        );
+
     }
 }

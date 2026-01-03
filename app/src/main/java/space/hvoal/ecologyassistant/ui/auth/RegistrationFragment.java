@@ -91,7 +91,6 @@ public class RegistrationFragment extends Fragment {
                     users.child(uid).setValue(user)
                             .addOnSuccessListener(unused -> {
                                 Snackbar.make(root, "Регистрация прошла успешно!", Snackbar.LENGTH_SHORT).show();
-                                // Возвращаемся на логин
                                 requireActivity().onBackPressed();
                             })
                             .addOnFailureListener(e ->

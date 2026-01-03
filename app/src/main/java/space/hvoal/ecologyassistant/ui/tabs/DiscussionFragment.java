@@ -79,6 +79,11 @@ public class DiscussionFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        view.findViewById(R.id.fabCreateProject).setOnClickListener(v ->
+                androidx.navigation.fragment.NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_projects_to_create)
+        );
+
         switchDate.setOnClickListener(v -> {
             if (switchDate.isChecked()) switchSubscribersCnt.setChecked(false);
             rebuildAdapter();

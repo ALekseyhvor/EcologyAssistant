@@ -28,14 +28,6 @@
         </activity>
 
         <activity
-            android:name=".MyProjectActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".CreateProjectActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".DisscusionActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

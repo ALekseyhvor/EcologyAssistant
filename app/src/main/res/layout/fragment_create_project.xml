@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root_element_crproject"
-    tools:context=".CreateProjectActivity">
+    tools:context="space.hvoal.ecologyassistant.ui.tabs.CreateProjectFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
