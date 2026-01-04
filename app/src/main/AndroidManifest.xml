@@ -26,30 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".DisscusionActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/maps_api_key" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ChatActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"/>
-
     </application>
 
 </manifest>

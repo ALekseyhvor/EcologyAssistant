@@ -5,7 +5,7 @@
     android:id="@+id/root_element_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context="space.hvoal.ecologyassistant.ui.profile.EditProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -39,8 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/app_bar"
-        android:orientation="vertical"
-        android:background="@drawable/back">
+        android:orientation="vertical">
 
 
         <EditText
@@ -53,7 +52,7 @@
             android:hyphenationFrequency="none"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:textColorHint="#A7FFEB"
+            android:textColorHint="#1D1F1F"
             android:textSize="25sp" />
 
         <EditText
@@ -65,7 +64,7 @@
             android:hint="@string/txt_secondname"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:textColorHint="#A7FFEB"
+            android:textColorHint="#171817"
             android:textSize="25sp" />
 
         <EditText
@@ -76,7 +75,7 @@
             android:ems="10"
             android:hint="@string/txt_number"
             android:inputType="numberSigned"
-            android:textColorHint="#A7FFEB"
+            android:textColorHint="#171817"
             android:textSize="25sp" />
 
         <Button
@@ -90,5 +89,5 @@
             android:textSize="20sp"/>
 
     </LinearLayout>
-    
+
 </RelativeLayout>

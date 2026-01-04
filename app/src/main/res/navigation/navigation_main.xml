@@ -35,9 +35,17 @@
         <action
             android:id="@+id/action_profile_to_my_projects"
             app:destination="@id/myProjectsFragment" />
+        <action
+            android:id="@+id/action_profile_to_edit_profile"
+            app:destination="@id/editProfileFragment" />
     </fragment>
 
     <!-- ВНУТРЕННИЕ ЭКРАНЫ (не вкладки) -->
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="space.hvoal.ecologyassistant.ui.profile.EditProfileFragment"
+        android:label="Редактировать профиль" />
+
     <fragment
         android:id="@+id/createProjectFragment"
         android:name="space.hvoal.ecologyassistant.ui.tabs.CreateProjectFragment"

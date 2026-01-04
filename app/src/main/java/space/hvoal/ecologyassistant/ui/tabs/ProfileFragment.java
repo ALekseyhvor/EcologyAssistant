@@ -38,5 +38,11 @@ public class ProfileFragment extends Fragment {
                         .navigate(R.id.action_profile_to_my_projects)
         );
 
+        view.findViewById(R.id.btnEditProfile).setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_profile_to_edit_profile)
+        );
+
+
     }
 }
