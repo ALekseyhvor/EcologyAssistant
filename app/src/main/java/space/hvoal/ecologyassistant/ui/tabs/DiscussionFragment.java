@@ -211,12 +211,11 @@ public class DiscussionFragment extends Fragment {
                 });
 
                 holder.chatButton.setOnClickListener(v -> {
-                    // Переход в чат через Navigation (внутри nav_main.xml должен быть chatFragment)
                     Bundle args = new Bundle();
                     args.putString("projectId", model.getId());
                     androidx.navigation.fragment.NavHostFragment
                             .findNavController(DiscussionFragment.this)
-                            .navigate(R.id.chatFragment, args);
+                            .navigate(R.id.action_projects_to_details, args);
                 });
 
                 holder.subscribersTextView.setText(String.valueOf(
@@ -239,7 +238,6 @@ public class DiscussionFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        // если фрагмент уже стартанул — включаем прослушку сразу
         if (getLifecycle().getCurrentState().isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)) {
             adapter.startListening();
         }

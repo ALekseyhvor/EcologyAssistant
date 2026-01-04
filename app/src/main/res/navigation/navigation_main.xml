@@ -15,10 +15,9 @@
             android:id="@+id/action_projects_to_create"
             app:destination="@id/createProjectFragment" />
 
-        <!-- Переход в чат проекта -->
         <action
-            android:id="@+id/action_projects_to_chat"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_projects_to_details"
+            app:destination="@id/projectDetailsFragment" />
     </fragment>
 
     <fragment
@@ -57,12 +56,27 @@
         android:label="Мои проекты" />
 
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="space.hvoal.ecologyassistant.ui.chat.ChatFragment"
-        android:label="Чат">
+        android:id="@+id/projectDetailsFragment"
+        android:name="space.hvoal.ecologyassistant.ui.project.ProjectDetailsFragment"
+        android:label="Проект">
+        <argument
+            android:name="projectId"
+            app:argType="string" />
+        <!-- Переход в чат проекта -->
+        <action
+            android:id="@+id/action_projectDetails_to_comments"
+            app:destination="@id/projectCommentsFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/projectCommentsFragment"
+        android:name="space.hvoal.ecologyassistant.ui.comments.ProjectCommentsFragment"
+        android:label="Комментарии">
         <argument
             android:name="projectId"
             app:argType="string" />
     </fragment>
+
 
 </navigation>
