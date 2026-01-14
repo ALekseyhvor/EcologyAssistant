@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="space.hvoal.ecologyassistant.ui.tabs.MapFragment"
+        android:name="space.hvoal.ecologyassistant.ui.map.DgisMapFragment"
         android:label="Карта" />
 
     <fragment
