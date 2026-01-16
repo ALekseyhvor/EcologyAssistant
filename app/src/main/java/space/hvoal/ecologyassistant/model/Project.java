@@ -4,7 +4,7 @@ package space.hvoal.ecologyassistant.model;
 import java.util.List;
 
 public class Project {
-    private String id, dateTime, nameProject, description, author;
+    private String id, dateTime, nameProject, description, author, categoryId;
     private List<String> subscribers;
     private List<Comment> comments;
 
@@ -67,6 +67,14 @@ public class Project {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public List<String> getSubscribers() {

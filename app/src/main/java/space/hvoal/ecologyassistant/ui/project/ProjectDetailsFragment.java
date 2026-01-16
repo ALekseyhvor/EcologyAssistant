@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import space.hvoal.ecologyassistant.R;
+import space.hvoal.ecologyassistant.data.category.Categories;
 import space.hvoal.ecologyassistant.model.Project;
 
 public class ProjectDetailsFragment extends Fragment {
@@ -50,6 +51,7 @@ public class ProjectDetailsFragment extends Fragment {
 
         ImageView backBtn = view.findViewById(R.id.back_button);
         TextView tvTitle = view.findViewById(R.id.tvProjectTitle);
+        TextView tvCategory = view.findViewById(R.id.tvProjectCategory);
         TextView tvAuthor = view.findViewById(R.id.tvProjectAuthor);
         TextView tvDate = view.findViewById(R.id.tvProjectDate);
         TextView tvDesc = view.findViewById(R.id.tvProjectDescription);
@@ -85,6 +87,12 @@ public class ProjectDetailsFragment extends Fragment {
                 tvAuthor.setText("Автор: " + project.getAuthor());
                 tvDesc.setText(project.getDescription());
 
+                String cat = project.getCategoryId();
+                if (cat == null) cat = Categories.OTHER;
+
+                String title = "Категория: " + categoryTitle(cat);
+                tvCategory.setText(title);
+
                 // дата как в списке
                 @SuppressLint("SimpleDateFormat")
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -107,6 +115,13 @@ public class ProjectDetailsFragment extends Fragment {
         };
 
         refProject.child(projectId).addValueEventListener(projectListener);
+    }
+
+    private String categoryTitle(String categoryId) {
+        for (Categories.Item item : Categories.all()) {
+            if (item.id.equals(categoryId)) return item.title;
+        }
+        return "Другое";
     }
 
     @Override

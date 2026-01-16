@@ -26,6 +26,7 @@ public class ProjectWriter {
         projectMap.put("nameProject", project.getNameProject());
         projectMap.put("description", project.getDescription());
         projectMap.put("author", project.getAuthor());
+        projectMap.put("categoryId", project.getCategoryId());
         projectMap.put("subscribers", project.getSubscribers());
         projectMap.put("comments", project.getComments());
 

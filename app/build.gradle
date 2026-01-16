@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'androidx.navigation.safeargs'
 }
 
@@ -46,7 +45,6 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database:22.0.1'
     implementation 'com.google.firebase:firebase-auth:24.0.1'
-    //noinspection GradleCompatible
     implementation 'com.google.firebase:firebase-firestore:26.0.2'
     implementation 'com.firebaseui:firebase-ui-database:9.1.1'
 
@@ -55,9 +53,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
-
-    implementation 'com.google.android.gms:play-services-maps:19.2.0'
-    implementation 'com.google.android.gms:play-services-location:21.3.0'
 
     implementation 'ru.dgis.sdk:sdk-map:latest.release'
 

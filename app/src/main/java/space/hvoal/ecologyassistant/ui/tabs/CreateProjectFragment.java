@@ -37,6 +37,10 @@ import space.hvoal.ecologyassistant.R;
 import space.hvoal.ecologyassistant.model.Project;
 import space.hvoal.ecologyassistant.utils.ProjectWriter;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import space.hvoal.ecologyassistant.data.category.Categories;
+
 public class CreateProjectFragment extends Fragment {
 
     private FirebaseDatabase db;
@@ -45,14 +49,13 @@ public class CreateProjectFragment extends Fragment {
 
     private RelativeLayout root;
     private EditText authortext, nameproject, maintext;
-
+    private ChipGroup chipGroupCategory;
     private String author;
     private String nameP;
     private String mainP;
 
     private ProjectWriter projectWriter;
 
-    // Уведомление (оставляем как в Activity; позже можно убрать/переделать)
     private NotificationManager nm;
     private final int NOTIFICATION_ID = 1;
     private final String CHANNEL_ID = "CHANNEL_ID";
@@ -81,8 +84,20 @@ public class CreateProjectFragment extends Fragment {
         authortext = view.findViewById(R.id.editTextAuthor);
         nameproject = view.findViewById(R.id.editNameProject);
         maintext = view.findViewById(R.id.editMainTheme);
+        chipGroupCategory = view.findViewById(R.id.chipGroupCategory);
 
-        // Подставляем имя автора из Users/<uid>/name (как было)
+        for (Categories.Item item : Categories.all()) {
+            Chip chip = new Chip(requireContext());
+            chip.setText(item.title);
+            chip.setCheckable(true);
+            chip.setTag(item.id);
+            chipGroupCategory.addView(chip);
+
+            if (Categories.OTHER.equals(item.id)) {
+                chip.setChecked(true);
+            }
+        }
+
         String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
         userListener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -105,12 +120,10 @@ public class CreateProjectFragment extends Fragment {
         submit.setOnClickListener(v -> {
             if (!validate()) return;
 
-            saveProject();
+            if (!saveProject()) return;
+
             showNotification();
-
             Snackbar.make(root, "Проект создан!", Snackbar.LENGTH_SHORT).show();
-
-            // Возвращаемся в список проектов (вкладка “Проекты”)
             NavHostFragment.findNavController(this).popBackStack();
         });
     }
@@ -143,7 +156,7 @@ public class CreateProjectFragment extends Fragment {
         return true;
     }
 
-    private void saveProject() {
+    private boolean saveProject() {
         Calendar calendar = Calendar.getInstance();
 
         @SuppressLint("SimpleDateFormat")
@@ -152,13 +165,22 @@ public class CreateProjectFragment extends Fragment {
 
         String projectKey = UUID.randomUUID().toString();
 
-        projectWriter.saveProjectInformation(
-                new Project(projectKey, saveCurrentDate, nameP, mainP, author)
-        );
+        int checkedId = chipGroupCategory.getCheckedChipId();
+        if (checkedId == View.NO_ID) {
+            Snackbar.make(root, "Выберите категорию", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        Chip checkedChip = chipGroupCategory.findViewById(checkedId);
+        String categoryId = String.valueOf(checkedChip.getTag());
+
+        Project project = new Project(projectKey, saveCurrentDate, nameP, mainP, author);
+        project.setCategoryId(categoryId);
+
+        projectWriter.saveProjectInformation(project);
+        return true;
     }
 
     private void showNotification() {
-        // Пока оставим простое уведомление (как у тебя), можно потом улучшить
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(requireContext(), CHANNEL_ID)
                         .setAutoCancel(true)
