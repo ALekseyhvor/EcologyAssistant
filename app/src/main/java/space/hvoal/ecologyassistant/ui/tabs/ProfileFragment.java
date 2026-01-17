@@ -28,10 +28,16 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth auth;
     private DatabaseReference usersRef;
     private DatabaseReference projectsRef;
+    private DatabaseReference likesRef;
+
+    private String currentUid;
 
     private ValueEventListener userListener;
     private ValueEventListener myProjectsCountListener;
     private ValueEventListener likedProjectsCountListener;
+
+    private Query myProjectsQuery;
+    private Query likedQuery;
 
     private TextView tvName;
     private TextView tvEmail;
@@ -49,6 +55,7 @@ public class ProfileFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         projectsRef = FirebaseDatabase.getInstance().getReference().child("Projects");
+        likesRef = FirebaseDatabase.getInstance().getReference().child("Likes");
 
         tvName = view.findViewById(R.id.tvProfileName);
         tvEmail = view.findViewById(R.id.tvProfileEmail);
@@ -60,7 +67,7 @@ public class ProfileFragment extends Fragment {
         Button btnLogout = view.findViewById(R.id.btnLogout);
 
         FirebaseUser fu = auth.getCurrentUser();
-        String uid = fu != null ? fu.getUid() : null;
+        currentUid = fu != null ? fu.getUid() : null;
 
         tvName.setText("Профиль");
         tvEmail.setText(fu != null && fu.getEmail() != null ? fu.getEmail() : "");
@@ -88,7 +95,7 @@ public class ProfileFragment extends Fragment {
                     .navigate(R.id.loginFragment, null, opts);
         });
 
-        if (uid == null || uid.trim().isEmpty()) {
+        if (currentUid == null || currentUid.trim().isEmpty()) {
             btnMy.setEnabled(false);
             btnLiked.setEnabled(false);
             btnMy.setAlpha(0.5f);
@@ -103,9 +110,9 @@ public class ProfileFragment extends Fragment {
             }
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
-        usersRef.child(uid).addValueEventListener(userListener);
+        usersRef.child(currentUid).addValueEventListener(userListener);
 
-        Query myProjectsQuery = projectsRef.orderByChild("authorId").equalTo(uid);
+        myProjectsQuery = projectsRef.orderByChild("authorId").equalTo(currentUid);
         myProjectsCountListener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tvMyCount.setText(String.valueOf(snapshot.getChildrenCount()));
@@ -114,7 +121,7 @@ public class ProfileFragment extends Fragment {
         };
         myProjectsQuery.addValueEventListener(myProjectsCountListener);
 
-        Query likedQuery = projectsRef.orderByChild("likedAt/" + uid).startAt(1);
+        likedQuery = likesRef.orderByChild(currentUid).equalTo(true);
         likedProjectsCountListener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 tvLikedCount.setText(String.valueOf(snapshot.getChildrenCount()));
@@ -128,22 +135,24 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        FirebaseUser fu = auth != null ? auth.getCurrentUser() : null;
-        String uid = fu != null ? fu.getUid() : null;
+        if (currentUid != null && usersRef != null && userListener != null) {
+            usersRef.child(currentUid).removeEventListener(userListener);
+        }
 
-        if (uid != null && usersRef != null && userListener != null) {
-            usersRef.child(uid).removeEventListener(userListener);
+        if (myProjectsQuery != null && myProjectsCountListener != null) {
+            myProjectsQuery.removeEventListener(myProjectsCountListener);
         }
-        // Для Query removeEventListener работает на самом DatabaseReference, если передать тот же listener
-        if (projectsRef != null && myProjectsCountListener != null) {
-            projectsRef.removeEventListener(myProjectsCountListener);
-        }
-        if (projectsRef != null && likedProjectsCountListener != null) {
-            projectsRef.removeEventListener(likedProjectsCountListener);
+
+        if (likedQuery != null && likedProjectsCountListener != null) {
+            likedQuery.removeEventListener(likedProjectsCountListener);
         }
 
         userListener = null;
         myProjectsCountListener = null;
         likedProjectsCountListener = null;
+
+        myProjectsQuery = null;
+        likedQuery = null;
+        currentUid = null;
     }
 }
