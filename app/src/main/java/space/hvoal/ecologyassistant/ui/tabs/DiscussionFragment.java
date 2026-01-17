@@ -1,32 +1,43 @@
 package space.hvoal.ecologyassistant.ui.tabs;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.firebase.ui.database.ClassSnapshotParser;
+import com.firebase.ui.database.FirebaseArray;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 
-import java.util.Objects;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import space.hvoal.ecologyassistant.R;
 import space.hvoal.ecologyassistant.model.Project;
-import space.hvoal.ecologyassistant.ui.common.UiState;
-import space.hvoal.ecologyassistant.ui.tabs.projects.ProjectsAdapter;
-import space.hvoal.ecologyassistant.ui.tabs.projects.ProjectsViewModel;
+import space.hvoal.ecologyassistant.viewHolder.ProjectViewHolder;
 
 public class DiscussionFragment extends Fragment {
 
@@ -34,14 +45,10 @@ public class DiscussionFragment extends Fragment {
     private Switch switchDate;
     private Switch switchSubscribersCnt;
 
+    private DatabaseReference refProject;
     private FirebaseAuth auth;
-    private DatabaseReference usersref;
-    private ValueEventListener userListener;
 
-    private String username;
-
-    private ProjectsViewModel vm;
-    private ProjectsAdapter adapter;
+    private FirebaseRecyclerAdapter<Project, ProjectViewHolder> adapter;
 
     public DiscussionFragment() {
         super(R.layout.fragment_tab_discussion);
@@ -52,7 +59,7 @@ public class DiscussionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-        usersref = FirebaseDatabase.getInstance().getReference().child("Users");
+        refProject = FirebaseDatabase.getInstance().getReference().child("Projects");
 
         ImageView backBtn = view.findViewById(R.id.back_button);
         switchDate = view.findViewById(R.id.switchDate);
@@ -63,81 +70,159 @@ public class DiscussionFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycleView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        adapter = new ProjectsAdapter(new ProjectsAdapter.Listener() {
-            @Override
-            public void onOpenDetails(Project project) {
-                Bundle args = new Bundle();
-                args.putString("projectId", project.getId());
-                androidx.navigation.fragment.NavHostFragment
-                        .findNavController(DiscussionFragment.this)
-                        .navigate(R.id.action_projects_to_details, args);
-            }
-
-            @Override
-            public void onSubscribe(Project project) {
-                if (username == null || username.trim().isEmpty()) return;
-                vm.subscribe(project.getId(), username);
-            }
-        });
-
-        recyclerView.setAdapter(adapter);
-
         view.findViewById(R.id.fabCreateProject).setOnClickListener(v ->
                 androidx.navigation.fragment.NavHostFragment.findNavController(this)
                         .navigate(R.id.action_projects_to_create)
         );
 
-        vm = new ViewModelProvider(this).get(ProjectsViewModel.class);
-
         switchDate.setOnClickListener(v -> {
             if (switchDate.isChecked()) switchSubscribersCnt.setChecked(false);
-            vm.setSortMode(switchDate.isChecked()
-                    ? ProjectsViewModel.SortMode.DATE_DESC
-                    : ProjectsViewModel.SortMode.NAME_ASC
-            );
+            rebuildAdapter();
         });
 
         switchSubscribersCnt.setOnClickListener(v -> {
             if (switchSubscribersCnt.isChecked()) switchDate.setChecked(false);
-            vm.setSortMode(switchSubscribersCnt.isChecked()
-                    ? ProjectsViewModel.SortMode.SUBSCRIBERS_DESC
-                    : ProjectsViewModel.SortMode.NAME_ASC
-            );
+            rebuildAdapter();
         });
 
-        String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-        userListener = new ValueEventListener() {
-            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
-                    Object nameVal = snapshot.child("name").getValue();
-                    username = nameVal != null ? nameVal.toString() : null;
-                    adapter.setUsername(username);
-                }
-            }
-
-            @Override public void onCancelled(@NonNull DatabaseError error) { }
-        };
-        usersref.child(uid).addValueEventListener(userListener);
-
-        vm.state().observe(getViewLifecycleOwner(), state -> {
-            if (state == null) return;
-
-            if (state.status == UiState.Status.ERROR) {
-                Snackbar.make(view, "Ошибка загрузки проектов: " + state.error, Snackbar.LENGTH_LONG).show();
-                return;
-            }
-            if (state.status == UiState.Status.SUCCESS) {
-                adapter.submitList(state.data);
-            }
-        });
+        rebuildAdapter();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (userListener != null && auth.getCurrentUser() != null) {
-            usersref.child(auth.getCurrentUser().getUid()).removeEventListener(userListener);
+    public void onStart() {
+        super.onStart();
+        if (adapter != null) adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (adapter != null) adapter.stopListening();
+    }
+
+    private void rebuildAdapter() {
+        Query query;
+        if (switchDate != null && switchDate.isChecked()) {
+            query = refProject.orderByChild("dateTime");
+        } else if (switchSubscribersCnt != null && switchSubscribersCnt.isChecked()) {
+            query = refProject.orderByChild("likesCount");
+        } else {
+            query = refProject.orderByChild("nameProject");
         }
-        userListener = null;
+
+        FirebaseRecyclerOptions<Project> options = new FirebaseRecyclerOptions.Builder<Project>()
+                .setSnapshotArray(new FirebaseArray<>(query, new ClassSnapshotParser<>(Project.class)))
+                .build();
+
+        if (adapter != null) adapter.stopListening();
+
+        adapter = new FirebaseRecyclerAdapter<Project, ProjectViewHolder>(options) {
+
+            @Override
+            protected void onBindViewHolder(@NonNull ProjectViewHolder holder, int position, @NonNull Project model) {
+                holder.nameUserTextView.setText(model.getAuthor());
+                holder.nameprojectTextView.setText(model.getNameProject());
+
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+                @SuppressLint("SimpleDateFormat")
+                SimpleDateFormat viewFormat = new SimpleDateFormat("MMM-dd HH:mm");
+
+                String viewDate = "";
+                try {
+                    Date date = dateFormat.parse(model.getDateTime());
+                    if (date != null) viewDate = viewFormat.format(date);
+                } catch (ParseException ignored) { }
+
+                holder.creationdateTextView.setText(viewDate);
+                holder.textprojectTextView.setText(model.getDescription());
+
+                int commentsCount = Optional.ofNullable(model.getComments()).orElse(new ArrayList<>()).size();
+                holder.commTextView.setText(String.valueOf(commentsCount));
+
+                int likesCount = 0;
+                if (model.getLikesCount() != null) likesCount = model.getLikesCount();
+                else if (model.getLikes() != null) likesCount = model.getLikes().size();
+                holder.likesTextView.setText(String.valueOf(likesCount));
+
+                String uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+
+                boolean liked = uid != null
+                        && model.getLikes() != null
+                        && Boolean.TRUE.equals(model.getLikes().get(uid));
+
+                holder.likeButton.setImageResource(
+                        liked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
+                );
+
+                holder.likeButton.setOnClickListener(v -> {
+                    if (uid == null) return;
+                    holder.likeButton.setEnabled(false);
+                    toggleLike(model.getId(), uid, () -> holder.likeButton.setEnabled(true));
+                });
+
+                holder.chatButton.setOnClickListener(v -> {
+                    Bundle args = new Bundle();
+                    args.putString("projectId", model.getId());
+                    androidx.navigation.fragment.NavHostFragment
+                            .findNavController(DiscussionFragment.this)
+                            .navigate(R.id.action_projects_to_details, args);
+                });
+            }
+
+            @NonNull
+            @Override
+            public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.project_item, parent, false);
+                return new ProjectViewHolder(v, true);
+            }
+        };
+
+        recyclerView.setAdapter(adapter);
+
+        if (getLifecycle().getCurrentState().isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)) {
+            adapter.startListening();
+        }
+    }
+
+    private interface Done { void run(); }
+
+    private void toggleLike(String projectId, String uid, Done done) {
+        refProject.child(projectId).runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                Object likesObj = currentData.child("likes").getValue();
+                Map<String, Object> likes = (likesObj instanceof Map)
+                        ? (Map<String, Object>) likesObj
+                        : new HashMap<>();
+
+                boolean alreadyLiked = likes.containsKey(uid);
+
+                long cnt = 0;
+                Object cntObj = currentData.child("likesCount").getValue();
+                if (cntObj instanceof Long) cnt = (Long) cntObj;
+                else if (cntObj instanceof Integer) cnt = ((Integer) cntObj).longValue();
+
+                if (alreadyLiked) {
+                    likes.remove(uid);
+                    cnt = Math.max(0, cnt - 1);
+                } else {
+                    likes.put(uid, true);
+                    cnt = cnt + 1;
+                }
+
+                currentData.child("likes").setValue(likes);
+                currentData.child("likesCount").setValue(cnt);
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
+                done.run();
+            }
+        });
     }
 }

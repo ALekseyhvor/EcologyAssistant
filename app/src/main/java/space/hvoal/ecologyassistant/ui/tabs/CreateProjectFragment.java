@@ -171,10 +171,16 @@ public class CreateProjectFragment extends Fragment {
             return false;
         }
         Chip checkedChip = chipGroupCategory.findViewById(checkedId);
-        String categoryId = String.valueOf(checkedChip.getTag());
+        String categoryId = (String) checkedChip.getTag();
+
+        String uid = Objects.requireNonNull(auth.getCurrentUser()).getUid();
 
         Project project = new Project(projectKey, saveCurrentDate, nameP, mainP, author);
+        project.setAuthorId(uid);
         project.setCategoryId(categoryId);
+
+        project.setLikes(null);
+        project.setLikesCount(0);
 
         projectWriter.saveProjectInformation(project);
         return true;

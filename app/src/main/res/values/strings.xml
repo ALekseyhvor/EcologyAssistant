@@ -26,14 +26,14 @@
     <string name="txt_nameProject">Имя проекта</string>
     <string name="txt_authorProject">Автор</string>
     <string name="txt_submitProject">Предложить проект</string>
-    <string name="txt_like">Подписчики:</string>
+    <string name="txt_like">Лайки:</string>
     <string name="txt_comment">Комментарии:</string>
     <string name="txt_send">Отправить</string>
     <string name="txt_sendcomm">Оставить комментарий</string>
     <string name="txt_joinbtn">Присоединиться</string>
     <string name="txt_joinconfirmbtn">OK</string>
     <string name="txt_popularup">Наиболее популярные сверху</string>
-    <string name="txt_newerup">Cтарые серху</string>
+    <string name="txt_newerup">Новые серху</string>
     <string name="txt_viewchat">Чат</string>
     <string name="txt_sendchat">Отправить</string>
     <string name="background_image">Приветсвенное изображение</string>

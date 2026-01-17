@@ -15,70 +15,69 @@ import space.hvoal.ecologyassistant.ui.common.UiState;
 
 public class ProjectsViewModel extends ViewModel {
 
-    public enum SortMode { NAME_ASC, DATE_DESC, SUBSCRIBERS_DESC }
+    public enum SortMode { DEFAULT, DATE_DESC, SUBSCRIBERS_DESC }
 
     private final ProjectsRepository repo = new ProjectsRepository();
 
-    private final MutableLiveData<SortMode> sortMode = new MutableLiveData<>(SortMode.NAME_ASC);
-    private final MediatorLiveData<UiState<List<Project>>> out = new MediatorLiveData<>();
+    private final MutableLiveData<SortMode> sortMode = new MutableLiveData<>(SortMode.DEFAULT);
+    private final MediatorLiveData<UiState<List<Project>>> state = new MediatorLiveData<>();
 
-    private UiState<List<Project>> lastRepoState;
+    private final LiveData<UiState<List<Project>>> source = repo.observeAllProjects();
+
+    private UiState<List<Project>> last = UiState.loading();
 
     public ProjectsViewModel() {
-        LiveData<UiState<List<Project>>> src = repo.observeAllProjects();
-
-        out.addSource(src, state -> {
-            lastRepoState = state;
-            out.setValue(applySort(state, sortMode.getValue()));
+        state.addSource(source, s -> {
+            last = s == null ? UiState.loading() : s;
+            publish();
         });
-
-        out.addSource(sortMode, mode -> {
-            if (lastRepoState != null) out.setValue(applySort(lastRepoState, mode));
-        });
+        state.addSource(sortMode, m -> publish());
     }
 
     public LiveData<UiState<List<Project>>> state() {
-        return out;
+        return state;
     }
 
     public void setSortMode(SortMode mode) {
         sortMode.setValue(mode);
     }
 
-    public void subscribe(String projectId, String username) {
-        repo.subscribeToProject(projectId, username);
+    private void publish() {
+        if (last.status == UiState.Status.LOADING) {
+            state.setValue(UiState.loading());
+            return;
+        }
+
+        if (last.status == UiState.Status.ERROR) {
+            state.setValue(UiState.error(last.error));
+            return;
+        }
+
+        List<Project> list = last.data == null ? new ArrayList<>() : new ArrayList<>(last.data);
+        SortMode mode = sortMode.getValue() == null ? SortMode.DEFAULT : sortMode.getValue();
+
+        if (mode == SortMode.DATE_DESC) {
+            list.sort((a, b) -> safe(b.getDateTime()).compareTo(safe(a.getDateTime())));
+        } else if (mode == SortMode.SUBSCRIBERS_DESC) {
+            list.sort(Comparator.comparingInt(this::likesOf).reversed());
+        }
+
+        state.setValue(UiState.success(list));
+    }
+
+    private int likesOf(Project p) {
+        if (p == null) return 0;
+        if (p.getLikesCount() != null) return p.getLikesCount();
+        return p.getLikes() == null ? 0 : p.getLikes().size();
+    }
+
+    private String safe(String s) {
+        return s == null ? "" : s;
     }
 
     @Override
     protected void onCleared() {
         repo.clear();
         super.onCleared();
-    }
-
-    private UiState<List<Project>> applySort(UiState<List<Project>> state, SortMode mode) {
-        if (state == null) return UiState.loading();
-        if (state.status != UiState.Status.SUCCESS || state.data == null) return state;
-
-        List<Project> copy = new ArrayList<>(state.data);
-
-        if (mode == SortMode.DATE_DESC) {
-            copy.sort((a, b) -> {
-                String da = a.getDateTime() == null ? "" : a.getDateTime();
-                String db = b.getDateTime() == null ? "" : b.getDateTime();
-                return db.compareTo(da);
-            });
-        } else if (mode == SortMode.SUBSCRIBERS_DESC) {
-            copy.sort(Comparator.comparingInt((Project p) ->
-                    p.getSubscribers() == null ? 0 : p.getSubscribers().size()
-            ).reversed());
-        } else {
-            copy.sort((a, b) -> {
-                String na = a.getNameProject() == null ? "" : a.getNameProject();
-                String nb = b.getNameProject() == null ? "" : b.getNameProject();
-                return na.compareToIgnoreCase(nb);
-            });
-        }
-
-        return UiState.success(copy);
     }
 }

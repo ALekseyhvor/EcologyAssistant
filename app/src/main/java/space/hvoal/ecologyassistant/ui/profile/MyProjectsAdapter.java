@@ -21,9 +21,7 @@ import space.hvoal.ecologyassistant.viewHolder.ProjectViewHolder;
 
 public class MyProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
 
-    public interface Listener {
-        void onOpen(Project project);
-    }
+    public interface Listener { void onOpen(Project project); }
 
     private final Listener listener;
     private final List<Project> items = new ArrayList<>();
@@ -42,7 +40,7 @@ public class MyProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
     @Override
     public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item, parent, false);
-        return new ProjectViewHolder(v, true); // selfProjects=true => joinButton скрыт
+        return new ProjectViewHolder(v, true);
     }
 
     @Override
@@ -54,25 +52,26 @@ public class MyProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
         holder.textprojectTextView.setText(model.getDescription());
 
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat viewFormat = new SimpleDateFormat("MMM-dd HH:mm");
+        SimpleDateFormat vf = new SimpleDateFormat("MMM-dd HH:mm");
 
         String viewDate = "";
         try {
-            Date date = dateFormat.parse(model.getDateTime());
-            if (date != null) viewDate = viewFormat.format(date);
+            Date date = df.parse(model.getDateTime());
+            if (date != null) viewDate = vf.format(date);
         } catch (ParseException ignored) { }
-
         holder.creationdateTextView.setText(viewDate);
 
-        holder.subscribersTextView.setText(String.valueOf(
-                Optional.ofNullable(model.getSubscribers()).orElse(new ArrayList<>()).size()
-        ));
+        int commentsCount = Optional.ofNullable(model.getComments()).orElse(new ArrayList<>()).size();
+        holder.commTextView.setText(String.valueOf(commentsCount));
 
-        holder.commTextView.setText(String.valueOf(
-                Optional.ofNullable(model.getComments()).orElse(new ArrayList<>()).size()
-        ));
+        int likesCount = model.getLikesCount() != null
+                ? model.getLikesCount()
+                : (model.getLikes() == null ? 0 : model.getLikes().size());
+        holder.likesTextView.setText(String.valueOf(likesCount));
+
+        holder.likeButton.setVisibility(View.GONE);
 
         holder.chatButton.setOnClickListener(v -> listener.onOpen(model));
     }

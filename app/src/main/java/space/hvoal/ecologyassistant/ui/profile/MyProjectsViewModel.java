@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class MyProjectsViewModel extends ViewModel {
     public MyProjectsViewModel() {
         userState = userRepo.observeCurrentUser();
         state.addSource(userState, this::onUserState);
-        state.addSource(sortMode, mode -> publish());
+        state.addSource(sortMode, m -> publish());
     }
 
     public LiveData<UiState<List<Project>>> state() {
@@ -86,23 +85,22 @@ public class MyProjectsViewModel extends ViewModel {
             return;
         }
 
-        List<Project> src = s.data == null ? new ArrayList<>() : new ArrayList<>(s.data);
-
+        List<Project> list = s.data == null ? new ArrayList<>() : new ArrayList<>(s.data);
         SortMode mode = sortMode.getValue() == null ? SortMode.DEFAULT : sortMode.getValue();
 
         if (mode == SortMode.DATE_DESC) {
-            Collections.sort(src, (a, b) -> safe(b.getDateTime()).compareTo(safe(a.getDateTime())));
+            list.sort((a, b) -> safe(b.getDateTime()).compareTo(safe(a.getDateTime())));
         } else if (mode == SortMode.SUBSCRIBERS_DESC) {
-            Collections.sort(src, new Comparator<Project>() {
-                @Override public int compare(Project a, Project b) {
-                    int ca = a.getSubscribers() == null ? 0 : a.getSubscribers().size();
-                    int cb = b.getSubscribers() == null ? 0 : b.getSubscribers().size();
-                    return Integer.compare(cb, ca);
-                }
-            });
+            list.sort(Comparator.comparingInt(this::likesOf).reversed());
         }
 
-        state.setValue(UiState.success(src));
+        state.setValue(UiState.success(list));
+    }
+
+    private int likesOf(Project p) {
+        if (p == null) return 0;
+        if (p.getLikesCount() != null) return p.getLikesCount();
+        return p.getLikes() == null ? 0 : p.getLikes().size();
     }
 
     private String safe(String s) {
@@ -116,3 +114,4 @@ public class MyProjectsViewModel extends ViewModel {
         super.onCleared();
     }
 }
+

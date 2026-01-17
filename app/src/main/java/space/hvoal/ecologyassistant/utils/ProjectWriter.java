@@ -9,27 +9,27 @@ import space.hvoal.ecologyassistant.model.Project;
 
 public class ProjectWriter {
 
-    private FirebaseDatabase db;
-    private DatabaseReference projectRef;
-
-    public ProjectWriter() {
-
-        db = FirebaseDatabase.getInstance();
-        projectRef = db.getReference().child("Projects");
-    }
+    private final DatabaseReference projectRef =
+            FirebaseDatabase.getInstance().getReference().child("Projects");
 
     public void saveProjectInformation(Project project) {
+        HashMap<String, Object> m = new HashMap<>();
 
-        HashMap<String, Object> projectMap = new HashMap<>();
-        projectMap.put("id", project.getId());
-        projectMap.put("dateTime", project.getDateTime());
-        projectMap.put("nameProject", project.getNameProject());
-        projectMap.put("description", project.getDescription());
-        projectMap.put("author", project.getAuthor());
-        projectMap.put("categoryId", project.getCategoryId());
-        projectMap.put("subscribers", project.getSubscribers());
-        projectMap.put("comments", project.getComments());
+        m.put("id", project.getId());
+        m.put("dateTime", project.getDateTime());
+        m.put("nameProject", project.getNameProject());
+        m.put("description", project.getDescription());
 
-        projectRef.child(project.getId()).updateChildren(projectMap);
+        m.put("author", project.getAuthor());
+        m.put("authorId", project.getAuthorId());
+
+        m.put("categoryId", project.getCategoryId());
+
+        m.put("likes", project.getLikes());
+        m.put("likesCount", project.getLikesCount());
+
+        m.put("comments", project.getComments());
+
+        projectRef.child(project.getId()).updateChildren(m);
     }
 }
