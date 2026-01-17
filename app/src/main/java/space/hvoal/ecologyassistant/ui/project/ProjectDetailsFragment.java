@@ -10,31 +10,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
 
 import space.hvoal.ecologyassistant.R;
 import space.hvoal.ecologyassistant.data.category.Categories;
 import space.hvoal.ecologyassistant.model.Project;
+import space.hvoal.ecologyassistant.ui.common.UiState;
 
 public class ProjectDetailsFragment extends Fragment {
 
-    private DatabaseReference refProject;
-    private ValueEventListener projectListener;
-
     private String projectId;
-    private Project project;
 
     public ProjectDetailsFragment() {
         super(R.layout.fragment_project_details);
@@ -44,17 +36,17 @@ public class ProjectDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        refProject = FirebaseDatabase.getInstance().getReference("Projects");
-
         Bundle args = getArguments();
-        if (args != null) projectId = args.getString("projectId");
+        projectId = args != null ? args.getString("projectId") : null;
 
         ImageView backBtn = view.findViewById(R.id.back_button);
+
         TextView tvTitle = view.findViewById(R.id.tvProjectTitle);
-        TextView tvCategory = view.findViewById(R.id.tvProjectCategory);
         TextView tvAuthor = view.findViewById(R.id.tvProjectAuthor);
         TextView tvDate = view.findViewById(R.id.tvProjectDate);
+        TextView tvCategory = view.findViewById(R.id.tvProjectCategory);
         TextView tvDesc = view.findViewById(R.id.tvProjectDescription);
+
         Button btnComments = view.findViewById(R.id.btnOpenComments);
 
         backBtn.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
@@ -72,64 +64,67 @@ public class ProjectDetailsFragment extends Fragment {
             return;
         }
 
-        projectListener = new ValueEventListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                project = snapshot.getValue(Project.class);
-                if (project == null) {
-                    tvTitle.setText("Проект не найден");
-                    btnComments.setEnabled(false);
-                    return;
-                }
+        ProjectDetailsViewModel vm = new ViewModelProvider(this).get(ProjectDetailsViewModel.class);
+        vm.setProjectId(projectId);
 
-                tvTitle.setText(project.getNameProject());
-                tvAuthor.setText("Автор: " + project.getAuthor());
-                tvDesc.setText(project.getDescription());
+        vm.state().observe(getViewLifecycleOwner(), state -> {
+            if (state == null) return;
 
-                String cat = project.getCategoryId();
-                if (cat == null) cat = Categories.OTHER;
-
-                String title = "Категория: " + categoryTitle(cat);
-                tvCategory.setText(title);
-
-                // дата как в списке
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat viewFormat = new SimpleDateFormat("MMM-dd HH:mm");
-                String viewDate = "";
-                try {
-                    Date d = dateFormat.parse(project.getDateTime());
-                    if (d != null) viewDate = viewFormat.format(d);
-                } catch (ParseException ignored) { }
-                tvDate.setText("Дата: " + viewDate);
-
-                int cnt = Optional.ofNullable(project.getComments()).orElse(new ArrayList<>()).size();
-                btnComments.setText("Комментарии (" + cnt + ")");
-                btnComments.setEnabled(true);
+            if (state.status == UiState.Status.LOADING) {
+                tvTitle.setText("Загрузка...");
+                btnComments.setEnabled(false);
+                return;
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        };
+            if (state.status == UiState.Status.ERROR) {
+                tvTitle.setText("Ошибка");
+                Snackbar.make(view, "Ошибка: " + state.error, Snackbar.LENGTH_LONG).show();
+                btnComments.setEnabled(false);
+                return;
+            }
 
-        refProject.child(projectId).addValueEventListener(projectListener);
+            Project project = state.data;
+            if (project == null) {
+                tvTitle.setText("Проект не найден");
+                btnComments.setEnabled(false);
+                return;
+            }
+
+            tvTitle.setText(safe(project.getNameProject()));
+            tvAuthor.setText("Автор: " + safe(project.getAuthor()));
+            tvDesc.setText(safe(project.getDescription()));
+            tvDate.setText("Дата: " + formatProjectDate(project.getDateTime()));
+
+            String catId = project.getCategoryId() != null ? project.getCategoryId() : Categories.OTHER;
+            tvCategory.setText("Категория: " + categoryTitle(catId));
+
+            int commentsCount = project.getComments() == null ? 0 : project.getComments().size();
+            btnComments.setText("Комментарии (" + commentsCount + ")");
+            btnComments.setEnabled(true);
+        });
+    }
+
+    private String safe(String s) {
+        return s == null ? "" : s;
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private String formatProjectDate(String raw) {
+        if (raw == null) return "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat viewFormat = new SimpleDateFormat("MMM-dd HH:mm");
+        try {
+            Date d = dateFormat.parse(raw);
+            return d == null ? "" : viewFormat.format(d);
+        } catch (ParseException ignored) {
+            return "";
+        }
     }
 
     private String categoryTitle(String categoryId) {
-        for (Categories.Item item : Categories.all()) {
-            if (item.id.equals(categoryId)) return item.title;
+        for (Categories.Item it : Categories.all()) {
+            if (it.id.equals(categoryId)) return it.title;
         }
         return "Другое";
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (projectListener != null && projectId != null) {
-            refProject.child(projectId).removeEventListener(projectListener);
-        }
-        projectListener = null;
     }
 }
