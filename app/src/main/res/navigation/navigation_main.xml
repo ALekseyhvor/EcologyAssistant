@@ -4,13 +4,11 @@
     android:id="@+id/nav_main"
     app:startDestination="@id/discussionFragment">
 
-    <!-- ВКЛАДКИ (BottomNav) -->
     <fragment
         android:id="@+id/discussionFragment"
         android:name="space.hvoal.ecologyassistant.ui.tabs.DiscussionFragment"
         android:label="Проекты">
 
-        <!-- Переход на создание проекта (будет из FAB «+») -->
         <action
             android:id="@+id/action_projects_to_create"
             app:destination="@id/createProjectFragment" />
@@ -30,16 +28,17 @@
         android:name="space.hvoal.ecologyassistant.ui.tabs.ProfileFragment"
         android:label="Профиль">
 
-        <!-- Мои проекты внутри профиля -->
         <action
             android:id="@+id/action_profile_to_my_projects"
             app:destination="@id/myProjectsFragment" />
+        <action
+            android:id="@+id/action_profile_to_liked_projects"
+            app:destination="@id/likedProjectsFragment" />
         <action
             android:id="@+id/action_profile_to_edit_profile"
             app:destination="@id/editProfileFragment" />
     </fragment>
 
-    <!-- ВНУТРЕННИЕ ЭКРАНЫ (не вкладки) -->
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="space.hvoal.ecologyassistant.ui.profile.EditProfileFragment"
@@ -56,18 +55,21 @@
         android:label="Мои проекты" />
 
     <fragment
+        android:id="@+id/likedProjectsFragment"
+        android:name="space.hvoal.ecologyassistant.ui.tabs.LikedProjectsFragment"
+        android:label="Понравившиеся" />
+
+    <fragment
         android:id="@+id/projectDetailsFragment"
         android:name="space.hvoal.ecologyassistant.ui.project.ProjectDetailsFragment"
         android:label="Проект">
         <argument
             android:name="projectId"
             app:argType="string" />
-        <!-- Переход в чат проекта -->
         <action
             android:id="@+id/action_projectDetails_to_comments"
             app:destination="@id/projectCommentsFragment" />
     </fragment>
-
 
     <fragment
         android:id="@+id/projectCommentsFragment"

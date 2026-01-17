@@ -2,24 +2,41 @@ package space.hvoal.ecologyassistant.ui.tabs;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import space.hvoal.ecologyassistant.R;
-import space.hvoal.ecologyassistant.model.User;
-import space.hvoal.ecologyassistant.ui.common.UiState;
-import space.hvoal.ecologyassistant.ui.profile.ProfileViewModel;
 
 public class ProfileFragment extends Fragment {
+
+    private FirebaseAuth auth;
+    private DatabaseReference usersRef;
+    private DatabaseReference projectsRef;
+
+    private ValueEventListener userListener;
+    private ValueEventListener myProjectsCountListener;
+    private ValueEventListener likedProjectsCountListener;
+
+    private TextView tvName;
+    private TextView tvEmail;
+    private TextView tvMyCount;
+    private TextView tvLikedCount;
 
     public ProfileFragment() {
         super(R.layout.fragment_tab_profile);
@@ -29,40 +46,39 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tvFullName = view.findViewById(R.id.tvProfileFullName);
-        TextView tvEmail = view.findViewById(R.id.tvProfileEmail);
-        TextView tvPhone = view.findViewById(R.id.tvProfilePhone);
+        auth = FirebaseAuth.getInstance();
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        projectsRef = FirebaseDatabase.getInstance().getReference().child("Projects");
 
-        ProfileViewModel vm = new ViewModelProvider(this).get(ProfileViewModel.class);
+        tvName = view.findViewById(R.id.tvProfileName);
+        tvEmail = view.findViewById(R.id.tvProfileEmail);
+        tvMyCount = view.findViewById(R.id.tvMyProjectsCount);
+        tvLikedCount = view.findViewById(R.id.tvLikedProjectsCount);
 
-        vm.userState().observe(getViewLifecycleOwner(), state -> {
-            if (state == null) return;
+        Button btnMy = view.findViewById(R.id.btnMyProjects);
+        Button btnLiked = view.findViewById(R.id.btnLikedProjects);
+        Button btnLogout = view.findViewById(R.id.btnLogout);
 
-            if (state.status == UiState.Status.LOADING) {
-                tvFullName.setText("Загрузка...");
-                tvEmail.setText("—");
-                tvPhone.setText("—");
-                return;
-            }
+        FirebaseUser fu = auth.getCurrentUser();
+        String uid = fu != null ? fu.getUid() : null;
 
-            if (state.status == UiState.Status.ERROR) {
-                tvFullName.setText("Ошибка");
-                tvEmail.setText("—");
-                tvPhone.setText("—");
-                Snackbar.make(view, "Ошибка профиля: " + state.error, Snackbar.LENGTH_LONG).show();
-                return;
-            }
+        tvName.setText("Профиль");
+        tvEmail.setText(fu != null && fu.getEmail() != null ? fu.getEmail() : "");
+        tvMyCount.setText("0");
+        tvLikedCount.setText("0");
 
-            User u = state.data;
-            if (u == null) return;
+        btnMy.setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_profile_to_my_projects)
+        );
 
-            tvFullName.setText(safe(u.getName()) + " " + safe(u.getSecondname()));
-            tvEmail.setText("Email: " + safe(u.getEmail()));
-            tvPhone.setText("Телефон: " + safe(u.getPhone()));
-        });
+        btnLiked.setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_profile_to_liked_projects)
+        );
 
-        view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
-            vm.logout();
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
 
             NavOptions opts = new NavOptions.Builder()
                     .setPopUpTo(R.id.mainFragment, true)
@@ -72,18 +88,62 @@ public class ProfileFragment extends Fragment {
                     .navigate(R.id.loginFragment, null, opts);
         });
 
-        view.findViewById(R.id.btnMyProjects).setOnClickListener(v ->
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_profile_to_my_projects)
-        );
+        if (uid == null || uid.trim().isEmpty()) {
+            btnMy.setEnabled(false);
+            btnLiked.setEnabled(false);
+            btnMy.setAlpha(0.5f);
+            btnLiked.setAlpha(0.5f);
+            return;
+        }
 
-        view.findViewById(R.id.btnEditProfile).setOnClickListener(v ->
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_profile_to_edit_profile)
-        );
+        userListener = new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Object nameVal = snapshot.child("name").getValue();
+                if (nameVal != null) tvName.setText(nameVal.toString());
+            }
+            @Override public void onCancelled(@NonNull DatabaseError error) { }
+        };
+        usersRef.child(uid).addValueEventListener(userListener);
+
+        Query myProjectsQuery = projectsRef.orderByChild("authorId").equalTo(uid);
+        myProjectsCountListener = new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tvMyCount.setText(String.valueOf(snapshot.getChildrenCount()));
+            }
+            @Override public void onCancelled(@NonNull DatabaseError error) { }
+        };
+        myProjectsQuery.addValueEventListener(myProjectsCountListener);
+
+        Query likedQuery = projectsRef.orderByChild("likedAt/" + uid).startAt(1);
+        likedProjectsCountListener = new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tvLikedCount.setText(String.valueOf(snapshot.getChildrenCount()));
+            }
+            @Override public void onCancelled(@NonNull DatabaseError error) { }
+        };
+        likedQuery.addValueEventListener(likedProjectsCountListener);
     }
 
-    private String safe(String s) {
-        return s == null ? "" : s;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        FirebaseUser fu = auth != null ? auth.getCurrentUser() : null;
+        String uid = fu != null ? fu.getUid() : null;
+
+        if (uid != null && usersRef != null && userListener != null) {
+            usersRef.child(uid).removeEventListener(userListener);
+        }
+        // Для Query removeEventListener работает на самом DatabaseReference, если передать тот же listener
+        if (projectsRef != null && myProjectsCountListener != null) {
+            projectsRef.removeEventListener(myProjectsCountListener);
+        }
+        if (projectsRef != null && likedProjectsCountListener != null) {
+            projectsRef.removeEventListener(likedProjectsCountListener);
+        }
+
+        userListener = null;
+        myProjectsCountListener = null;
+        likedProjectsCountListener = null;
     }
 }

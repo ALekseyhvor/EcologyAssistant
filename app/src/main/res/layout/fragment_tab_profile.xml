@@ -2,54 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
-        android:id="@+id/tvProfileTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Профиль"
-        android:textSize="20sp"
-        android:layout_marginBottom="12dp"/>
-
-    <TextView
-        android:id="@+id/tvProfileFullName"
+        android:id="@+id/tvProfileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="—"
-        android:textSize="16sp"
+        android:text="Имя"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:layout_marginBottom="6dp"/>
 
     <TextView
         android:id="@+id/tvProfileEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="—"
+        android:text="email@example.com"
         android:textSize="14sp"
-        android:layout_marginBottom="6dp"/>
+        android:layout_marginBottom="20dp"/>
 
-    <TextView
-        android:id="@+id/tvProfilePhone"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="—"
-        android:textSize="14sp"
-        android:layout_marginBottom="18dp"/>
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
 
-    <Button
-        android:id="@+id/btnEditProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Редактировать профиль"
-        android:layout_marginBottom="12dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Мои проекты"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvMyProjectsCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Понравившиеся"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvLikedProjectsCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnMyProjects"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Мои проекты"
-        android:layout_marginBottom="12dp"/>
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnLikedProjects"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Понравившиеся"
+        android:layout_marginBottom="18dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.2"
+        android:layout_marginBottom="18dp"/>
 
     <Button
         android:id="@+id/btnLogout"
