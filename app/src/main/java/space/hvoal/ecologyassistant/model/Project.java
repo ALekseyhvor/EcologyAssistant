@@ -13,6 +13,8 @@ public class Project {
     private String author;
     private String authorId;
 
+    private ProjectLocation location;
+
     private String categoryId;
 
     private Map<String, Boolean> likes;
@@ -47,6 +49,9 @@ public class Project {
 
     public String getAuthorId() { return authorId; }
     public void setAuthorId(String authorId) { this.authorId = authorId; }
+
+    public ProjectLocation getLocation() { return location; }
+    public void setLocation(ProjectLocation location) { this.location = location; }
 
     public String getCategoryId() { return categoryId; }
     public void setCategoryId(String categoryId) { this.categoryId = categoryId; }

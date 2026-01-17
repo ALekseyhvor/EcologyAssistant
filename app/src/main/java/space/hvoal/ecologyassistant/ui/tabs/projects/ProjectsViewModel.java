@@ -15,7 +15,7 @@ import space.hvoal.ecologyassistant.ui.common.UiState;
 
 public class ProjectsViewModel extends ViewModel {
 
-    public enum SortMode { DEFAULT, DATE_DESC, SUBSCRIBERS_DESC }
+    public enum SortMode { DEFAULT, DATE_DESC, LIKES_DESC }
 
     private final ProjectsRepository repo = new ProjectsRepository();
 
@@ -42,6 +42,10 @@ public class ProjectsViewModel extends ViewModel {
         sortMode.setValue(mode);
     }
 
+    public void toggleLike(String projectId) {
+        repo.toggleLike(projectId);
+    }
+
     private void publish() {
         if (last.status == UiState.Status.LOADING) {
             state.setValue(UiState.loading());
@@ -58,7 +62,7 @@ public class ProjectsViewModel extends ViewModel {
 
         if (mode == SortMode.DATE_DESC) {
             list.sort((a, b) -> safe(b.getDateTime()).compareTo(safe(a.getDateTime())));
-        } else if (mode == SortMode.SUBSCRIBERS_DESC) {
+        } else if (mode == SortMode.LIKES_DESC) {
             list.sort(Comparator.comparingInt(this::likesOf).reversed());
         }
 

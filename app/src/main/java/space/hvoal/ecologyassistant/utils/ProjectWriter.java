@@ -25,6 +25,8 @@ public class ProjectWriter {
 
         m.put("categoryId", project.getCategoryId());
 
+        m.put("location", project.getLocation());
+
         m.put("likes", project.getLikes());
         m.put("likesCount", project.getLikesCount());
 

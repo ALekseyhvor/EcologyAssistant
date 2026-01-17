@@ -8,11 +8,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import space.hvoal.ecologyassistant.R;
@@ -30,17 +38,24 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
     private Listener listener;
 
     private String currentUid;
-
     private boolean showLikeButton = true;
+
+    private final DatabaseReference likesRef =
+            FirebaseDatabase.getInstance().getReference().child("Likes");
+
+
+    private final Map<ProjectViewHolder, ListenerEntry> likeListeners = new HashMap<>();
+
+    private final Map<String, Boolean> likedCache = new HashMap<>();
+
+    private static class ListenerEntry {
+        DatabaseReference ref;
+        ValueEventListener listener;
+    }
 
     public ProjectsAdapter() { }
 
     public ProjectsAdapter(Listener listener) {
-        this.listener = listener;
-    }
-
-    public ProjectsAdapter(List<Project> list, Listener listener) {
-        submitList(list);
         this.listener = listener;
     }
 
@@ -68,7 +83,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
     @Override
     public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item, parent, false);
-        return new ProjectViewHolder(v, true);
+        return new ProjectViewHolder(v, showLikeButton);
     }
 
     @Override
@@ -78,17 +93,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
         holder.nameUserTextView.setText(model.getAuthor());
         holder.nameprojectTextView.setText(model.getNameProject());
         holder.textprojectTextView.setText(model.getDescription());
-
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat vf = new SimpleDateFormat("MMM-dd HH:mm");
-        String viewDate = "";
-        try {
-            Date d = df.parse(model.getDateTime());
-            if (d != null) viewDate = vf.format(d);
-        } catch (ParseException ignored) {}
-        holder.creationdateTextView.setText(viewDate);
+        holder.creationdateTextView.setText(formatDate(model.getDateTime()));
 
         int commentsCount = Optional.ofNullable(model.getComments()).orElse(new ArrayList<>()).size();
         holder.commTextView.setText(String.valueOf(commentsCount));
@@ -98,19 +103,51 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
 
         holder.likeButton.setVisibility(showLikeButton ? View.VISIBLE : View.GONE);
 
-        boolean liked = currentUid != null
-                && model.getLikes() != null
-                && Boolean.TRUE.equals(model.getLikes().get(currentUid));
+        detachLikeListener(holder);
 
+        String projectId = model.getId();
+        boolean cachedLiked = projectId != null && Boolean.TRUE.equals(likedCache.get(projectId));
         holder.likeButton.setImageResource(
-                liked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
+                cachedLiked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
         );
+
+        holder.likeButton.setEnabled(currentUid != null);
+
+        if (currentUid != null && projectId != null) {
+            DatabaseReference ref = likesRef.child(projectId).child(currentUid);
+
+            ValueEventListener l = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean liked = snapshot.exists();
+                    likedCache.put(projectId, liked);
+
+                    holder.likeButton.setImageResource(
+                            liked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
+                    );
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+
+            ref.addValueEventListener(l);
+
+            ListenerEntry entry = new ListenerEntry();
+            entry.ref = ref;
+            entry.listener = l;
+            likeListeners.put(holder, entry);
+        }
 
         holder.likeButton.setOnClickListener(v -> {
             if (listener == null) return;
+            if (currentUid == null) return;
+
             holder.likeButton.setEnabled(false);
             listener.onToggleLike(model);
-            holder.likeButton.setEnabled(true);
+            holder.likeButton.postDelayed(() -> holder.likeButton.setEnabled(true), 400);
         });
 
         holder.chatButton.setOnClickListener(v -> {
@@ -120,14 +157,41 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
     }
 
     @Override
+    public void onViewRecycled(@NonNull ProjectViewHolder holder) {
+        detachLikeListener(holder);
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    private void detachLikeListener(@NonNull ProjectViewHolder holder) {
+        ListenerEntry entry = likeListeners.remove(holder);
+        if (entry != null && entry.ref != null && entry.listener != null) {
+            entry.ref.removeEventListener(entry.listener);
+        }
     }
 
     private int likesOf(Project p) {
         if (p == null) return 0;
         if (p.getLikesCount() != null) return p.getLikesCount();
-        return p.getLikes() == null ? 0 : p.getLikes().size();
+        if (p.getLikes() != null) return p.getLikes().size();
+        return 0;
+    }
+
+    private String formatDate(String raw) {
+        if (raw == null) return "";
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat vf = new SimpleDateFormat("MMM-dd HH:mm");
+        try {
+            Date d = df.parse(raw);
+            return d == null ? "" : vf.format(d);
+        } catch (ParseException ignored) {
+            return "";
+        }
     }
 }
-
