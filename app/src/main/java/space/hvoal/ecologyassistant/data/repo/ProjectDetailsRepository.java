@@ -33,6 +33,9 @@ public class ProjectDetailsRepository {
                 if (p == null) {
                     out.postValue(UiState.error("Проект не найден"));
                 } else {
+                    if (p.getId() == null || p.getId().trim().isEmpty()) {
+                        p.setId(snapshot.getKey());
+                    }
                     out.postValue(UiState.success(p));
                 }
             }

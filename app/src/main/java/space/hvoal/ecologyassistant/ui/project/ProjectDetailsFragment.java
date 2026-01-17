@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,9 @@ public class ProjectDetailsFragment extends Fragment {
         TextView tvCategory = view.findViewById(R.id.tvProjectCategory);
         TextView tvDesc = view.findViewById(R.id.tvProjectDescription);
 
+        ImageView ivLike = view.findViewById(R.id.ivProjectLike);
+        TextView tvLikesCount = view.findViewById(R.id.tvProjectLikesCount);
+
         Button btnComments = view.findViewById(R.id.btnOpenComments);
 
         backBtn.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
@@ -61,11 +65,27 @@ public class ProjectDetailsFragment extends Fragment {
         if (projectId == null) {
             tvTitle.setText("Проект не найден (projectId=null)");
             btnComments.setEnabled(false);
+            ivLike.setEnabled(false);
             return;
         }
 
         ProjectDetailsViewModel vm = new ViewModelProvider(this).get(ProjectDetailsViewModel.class);
         vm.setProjectId(projectId);
+
+        ivLike.setOnClickListener(v -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                Snackbar.make(view, "Нужно войти в аккаунт", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            vm.toggleLike();
+        });
+
+        vm.liked().observe(getViewLifecycleOwner(), liked -> {
+            boolean isLiked = liked != null && liked;
+            ivLike.setImageResource(
+                    isLiked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
+            );
+        });
 
         vm.state().observe(getViewLifecycleOwner(), state -> {
             if (state == null) return;
@@ -73,6 +93,7 @@ public class ProjectDetailsFragment extends Fragment {
             if (state.status == UiState.Status.LOADING) {
                 tvTitle.setText("Загрузка...");
                 btnComments.setEnabled(false);
+                ivLike.setEnabled(false);
                 return;
             }
 
@@ -80,6 +101,7 @@ public class ProjectDetailsFragment extends Fragment {
                 tvTitle.setText("Ошибка");
                 Snackbar.make(view, "Ошибка: " + state.error, Snackbar.LENGTH_LONG).show();
                 btnComments.setEnabled(false);
+                ivLike.setEnabled(false);
                 return;
             }
 
@@ -87,6 +109,7 @@ public class ProjectDetailsFragment extends Fragment {
             if (project == null) {
                 tvTitle.setText("Проект не найден");
                 btnComments.setEnabled(false);
+                ivLike.setEnabled(false);
                 return;
             }
 
@@ -101,6 +124,11 @@ public class ProjectDetailsFragment extends Fragment {
             int commentsCount = project.getComments() == null ? 0 : project.getComments().size();
             btnComments.setText("Комментарии (" + commentsCount + ")");
             btnComments.setEnabled(true);
+
+            int likesCount = project.getLikesCount() != null ? project.getLikesCount() : 0;
+            tvLikesCount.setText(String.valueOf(likesCount));
+
+            ivLike.setEnabled(true);
         });
     }
 
