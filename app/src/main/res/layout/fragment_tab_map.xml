@@ -15,7 +15,12 @@
         android:layout_height="36dp"
         android:layout_gravity="center"
         android:src="@android:drawable/ic_menu_mylocation"
-        android:contentDescription="@string/app_name" />
+        android:contentDescription="@string/app_name"
+        android:enabled="false"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
 
     <!-- Кнопка подтверждения выбора точки -->
     <Button

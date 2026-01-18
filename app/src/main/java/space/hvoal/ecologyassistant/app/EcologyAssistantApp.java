@@ -3,6 +3,7 @@ package space.hvoal.ecologyassistant.app;
 import android.app.Application;
 
 import ru.dgis.sdk.DGis;
+import ru.dgis.sdk.Context;
 import ru.dgis.sdk.PersonalDataCollectionConsent;
 import ru.dgis.sdk.map.GlobalMapOptions;
 
@@ -15,11 +16,13 @@ import ru.dgis.sdk.platform.StorageOptions;
 
 public class EcologyAssistantApp extends Application {
 
+    public static Context SDK_CONTEXT;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        DGis.initialize(
+        SDK_CONTEXT = DGis.initialize(
                 this,
                 new HttpOptions(),
                 new LogOptions(),

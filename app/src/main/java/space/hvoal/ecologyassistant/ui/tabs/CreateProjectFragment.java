@@ -74,7 +74,6 @@ public class CreateProjectFragment extends Fragment {
 
     private ValueEventListener userListener;
 
-   // private LocationPickerViewModel pickerVm;
     private TextView tvPickedLocation;
 
     private space.hvoal.ecologyassistant.ui.map.LocationPickerViewModel pickerVm;
@@ -136,12 +135,9 @@ public class CreateProjectFragment extends Fragment {
 
 
         btnPickLocation.setOnClickListener(v -> {
-            // Вариант 1 (правильный): перейти на экран карты в pickerMode.
-            // Тут нужен action из твоего nav_graph. Ниже шаблон:
             Bundle b = new Bundle();
             b.putBoolean("pickerMode", true);
 
-            // ВСТАВЬ СВОЙ destination id вместо R.id.tabMapFragment / action...
             NavHostFragment.findNavController(this)
                     .navigate(R.id.mapFragment, b);
 
@@ -180,7 +176,6 @@ public class CreateProjectFragment extends Fragment {
     private void showLocationChoiceAndSave(Project project) {
         ProjectLocation picked = pickerVm.getSelectedValue();
 
-        // Если точка уже выбрана — сохраняем сразу
         if (picked != null && picked.getLat() != null && picked.getLng() != null) {
             project.setLocation(new ProjectLocation(picked.getLat(), picked.getLng()));
             pickerVm.clear();
@@ -195,7 +190,6 @@ public class CreateProjectFragment extends Fragment {
                     Bundle b = new Bundle();
                     b.putBoolean("pickerMode", true);
 
-                    // ВСТАВЬ СВОЙ destination id карты
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.mapFragment, b);
 
@@ -206,7 +200,6 @@ public class CreateProjectFragment extends Fragment {
                     finishSave(project);
                 })
                 .setNegativeButton("По геолокации устройства", (d, w) -> {
-                    // твой текущий вариант: запросить permission и взять last known
                     saveProjectWithLocation(project);
                 })
                 .show();

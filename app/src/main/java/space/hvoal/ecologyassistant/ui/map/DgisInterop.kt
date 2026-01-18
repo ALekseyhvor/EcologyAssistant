@@ -1,14 +1,15 @@
 package space.hvoal.ecologyassistant.ui.map
 
+import android.util.Size
+import ru.dgis.sdk.Context
 import ru.dgis.sdk.coordinates.GeoPoint
 import ru.dgis.sdk.geometry.GeoPointWithElevation
 import ru.dgis.sdk.map.CameraPosition
-import ru.dgis.sdk.map.Image
 import ru.dgis.sdk.map.Map
 import ru.dgis.sdk.map.MapObjectManager
-import ru.dgis.sdk.map.MapView
 import ru.dgis.sdk.map.MarkerOptions
 import ru.dgis.sdk.map.Zoom
+import ru.dgis.sdk.map.imageFromResource
 import space.hvoal.ecologyassistant.R
 
 object DgisInterop {
@@ -27,11 +28,27 @@ object DgisInterop {
     }
 
     @JvmStatic
+    fun markerOptions(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
+        val icon = imageFromResource(
+            sdkContext,
+            R.drawable.smart_ecology_eco_nature_world_icon_,
+            Size(72, 72)
+        )
+
+        return MarkerOptions(
+            position = point,
+            icon = icon,
+            text = null,
+            userData = userData
+        )
+    }
+
+    @JvmStatic
     fun markerOptions(point: GeoPointWithElevation, userData: Any?): MarkerOptions {
         return MarkerOptions(
             position = point,
             icon = null,
-            text = "Хуй",
+            text = null,
             userData = userData
         )
     }
@@ -42,15 +59,12 @@ object DgisInterop {
             GeoPoint(lat, lng),
             Zoom(zoom)
         )
-        // так надёжнее, чем move(), и не требует анимационных параметров
         map.camera.position = pos
-
     }
 
     @JvmStatic
     fun cameraCenter(map: ru.dgis.sdk.map.Map): DoubleArray {
         val p = map.camera.position.point
-        // Latitude / Longitude -> Double
         val lat = p.latitude.value
         val lng = p.longitude.value
         return doubleArrayOf(lat, lng)
