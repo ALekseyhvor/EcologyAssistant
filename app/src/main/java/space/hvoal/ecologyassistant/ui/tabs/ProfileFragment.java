@@ -84,6 +84,11 @@ public class ProfileFragment extends Fragment {
                         .navigate(R.id.action_profile_to_liked_projects)
         );
 
+        View btnEditProfile = view.findViewById(R.id.btn_edit_profile);
+        btnEditProfile.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_profile_to_edit_profile)
+        );
+
         btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
 

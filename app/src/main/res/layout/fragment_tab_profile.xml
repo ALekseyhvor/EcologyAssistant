@@ -72,6 +72,13 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Редактировать профиль"
+        android:layout_marginTop="12dp" />
+
+    <Button
         android:id="@+id/btnMyProjects"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
