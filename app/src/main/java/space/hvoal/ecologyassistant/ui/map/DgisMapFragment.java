@@ -2,7 +2,6 @@ package space.hvoal.ecologyassistant.ui.map;
 
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -35,6 +34,10 @@ import space.hvoal.ecologyassistant.ui.common.UiState;
 
 public class DgisMapFragment extends Fragment {
 
+    private static final String UD_PICKED  = "picked";
+    private static final String UD_PROJECT = "project:";
+    private static final String UD_PARK    = "park:";
+
     private boolean pickerMode = false;
 
     private MapView mapView;
@@ -49,6 +52,51 @@ public class DgisMapFragment extends Fragment {
     private TouchEventsObserver touchObserver;
 
     private List<Project> lastProjects = new ArrayList<>();
+
+    // -------------------- Parks (Nizhny Novgorod) --------------------
+
+    private static class Park {
+        final String id;
+        final String title;
+        final String fullDesc;
+        final double lat;
+        final double lng;
+
+        Park(String id, String title, String fullDesc, double lat, double lng) {
+            this.id = id;
+            this.title = title;
+            this.fullDesc = fullDesc;
+            this.lat = lat;
+            this.lng = lng;
+        }
+    }
+
+    private final List<Park> parks = new ArrayList<Park>() {{
+        add(new Park(
+                "switzerland",
+                "Парк «Швейцария»",
+                "Парк «Швейцария» — один из самых больших парков Нижнего Новгорода. "
+                        + "Подходит для длинных прогулок: много зелени, аллеи, видовые точки, "
+                        + "места для спокойного отдыха и активности.",
+                56.274489, 43.973351
+        ));
+        add(new Park(
+                "kulibin",
+                "Парк им. Кулибина",
+                "Парк им. Кулибина — спокойный городской парк в центре: аллеи, лавочки, "
+                        + "удобно зайти на короткую прогулку. Исторически парк был создан в 1940 году "
+                        + "на территории бывшего кладбища.",
+                56.315191, 44.008250
+        ));
+        add(new Park(
+                "alex_garden",
+                "Александровский сад",
+                "Александровский сад — один из символов исторического центра. "
+                        + "Считается первым общественным парком Нижнего Новгорода (основание — 1835). "
+                        + "Находится на склонах Волги, рядом с набережными — хорошее место для видов и прогулки.",
+                56.329961, 44.019039
+        ));
+    }};
 
     public DgisMapFragment() {
         super(R.layout.fragment_tab_map);
@@ -103,11 +151,11 @@ public class DgisMapFragment extends Fragment {
                 MarkerOptions opts = DgisInterop.markerOptions(
                         EcologyAssistantApp.SDK_CONTEXT,
                         DgisInterop.point(lat, lng),
-                        "picked"
+                        UD_PICKED
                 );
 
                 pickedMarker = new Marker(opts);
-                try { pickedMarker.setUserData("picked"); } catch (Throwable ignored) {}
+                try { pickedMarker.setUserData(UD_PICKED); } catch (Throwable ignored) {}
                 objectManager.addObject(pickedMarker);
 
                 NavHostFragment.findNavController(this).popBackStack();
@@ -129,7 +177,6 @@ public class DgisMapFragment extends Fragment {
                 dgisMap = map;
                 objectManager = DgisInterop.createObjectManager(map);
 
-                // Один механизм: tap -> getRenderedObjects -> если есть projectId -> открыть детали
                 touchObserver = new TouchEventsObserver() {
                     @Override
                     public void onTap(@NonNull ScreenPoint point) {
@@ -148,11 +195,26 @@ public class DgisMapFragment extends Fragment {
                                         if (!isAdded()) return Unit.INSTANCE;
                                         if (objects == null || objects.isEmpty()) return Unit.INSTANCE;
 
-                                        String projectId = extractProjectId(objects);
-                                        if (projectId != null && !"picked".equals(projectId)) {
-                                            openProjectDetails(projectId);
+                                        String ud = extractUserData(objects);
+                                        if (ud == null || UD_PICKED.equals(ud)) return Unit.INSTANCE;
+
+                                        // Парк -> показываем AlertDialog
+                                        if (ud.startsWith(UD_PARK)) {
+                                            String parkId = ud.substring(UD_PARK.length());
+                                            Park park = findParkById(parkId);
+                                            if (park != null) showParkDialog(park);
+                                            return Unit.INSTANCE;
                                         }
 
+                                        // Проект -> переходим в детали проекта
+                                        if (ud.startsWith(UD_PROJECT)) {
+                                            String projectId = ud.substring(UD_PROJECT.length());
+                                            if (!projectId.isEmpty()) openProjectDetails(projectId);
+                                            return Unit.INSTANCE;
+                                        }
+
+                                        // fallback на случай старых маркеров без префикса
+                                        openProjectDetails(ud);
                                         return Unit.INSTANCE;
                                     }
                                 });
@@ -175,11 +237,11 @@ public class DgisMapFragment extends Fragment {
     }
 
     /**
-     * Достаём projectId из объектов под тапом.
-     * Приоритет: Marker с userData String -> иначе любой с userData String.
+     * Достаём userData (String) из объектов под тапом.
+     * Приоритет: Marker с String userData -> иначе любой объект с String userData.
      */
     @Nullable
-    private String extractProjectId(@NonNull List<RenderedObjectInfo> objects) {
+    private String extractUserData(@NonNull List<RenderedObjectInfo> objects) {
         // 1) приоритет маркера
         for (RenderedObjectInfo info : objects) {
             if (info == null) continue;
@@ -211,7 +273,7 @@ public class DgisMapFragment extends Fragment {
         return null;
     }
 
-    private void openProjectDetails(String projectId) {
+    private void openProjectDetails(@NonNull String projectId) {
         Bundle b = new Bundle();
         b.putString("projectId", projectId);
         NavHostFragment.findNavController(this)
@@ -223,31 +285,76 @@ public class DgisMapFragment extends Fragment {
 
         objectManager.removeAll();
 
+        // ---- Projects ----
         for (Project p : lastProjects) {
             if (p == null) continue;
 
             ProjectLocation loc = p.getLocation();
             if (loc == null || loc.getLat() == null || loc.getLng() == null) continue;
 
-            MarkerOptions options = DgisInterop.markerOptions(
+            String ud = UD_PROJECT + p.getId();
+
+            MarkerOptions options = DgisInterop.markerOptionsProject(
                     EcologyAssistantApp.SDK_CONTEXT,
                     DgisInterop.point(loc.getLat(), loc.getLng()),
-                    p.getId()
+                    ud
             );
 
             Marker m = new Marker(options);
-            // страховка: если markerOptions не проставляет userData, проставим здесь
-            try { m.setUserData(p.getId()); } catch (Throwable ignored) {}
+            try { m.setUserData(ud); } catch (Throwable ignored) {}
             objectManager.addObject(m);
         }
+
+        // ---- Parks ----
+        for (Park p : parks) {
+            String ud = UD_PARK + p.id;
+
+            MarkerOptions options = DgisInterop.markerOptionsPark(
+                    EcologyAssistantApp.SDK_CONTEXT,
+                    DgisInterop.point(p.lat, p.lng),
+                    ud
+            );
+
+            Marker m = new Marker(options);
+            try { m.setUserData(ud); } catch (Throwable ignored) {}
+            objectManager.addObject(m);
+        }
+
+        // Камера — на первый проект (если есть), иначе на первый парк
+        boolean moved = false;
 
         for (Project p : lastProjects) {
             ProjectLocation loc = p.getLocation();
             if (loc != null && loc.getLat() != null && loc.getLng() != null) {
                 DgisInterop.moveCamera(dgisMap, loc.getLat(), loc.getLng(), 15f);
+                moved = true;
                 break;
             }
         }
+
+        if (!moved && !parks.isEmpty()) {
+            Park p = parks.get(0);
+            DgisInterop.moveCamera(dgisMap, p.lat, p.lng, 12f);
+        }
+    }
+
+    // -------------------- Park helpers --------------------
+
+    @Nullable
+    private Park findParkById(String id) {
+        if (id == null) return null;
+        for (Park p : parks) if (id.equals(p.id)) return p;
+        return null;
+    }
+
+    private void showParkDialog(@NonNull Park p) {
+        if (!isAdded()) return;
+
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle(p.title)
+                .setMessage(p.fullDesc)
+                .setPositiveButton("Ок", null)
+                .show();
     }
 
     @Override
@@ -268,7 +375,8 @@ public class DgisMapFragment extends Fragment {
         super.onDestroyView();
     }
 
-    // Остались методы (если вдруг понадобятся позже)
+    // -------------------- Unused helpers (can be removed later) --------------------
+
     private Project findProject(String projectId) {
         if (projectId == null) return null;
         for (Project p : lastProjects) {

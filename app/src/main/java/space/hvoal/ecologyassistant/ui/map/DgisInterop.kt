@@ -27,8 +27,26 @@ object DgisInterop {
         )
     }
 
+    // --- NEW: отдельная иконка для проектов ---
     @JvmStatic
-    fun markerOptions(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
+    fun markerOptionsProject(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
+        val icon = imageFromResource(
+            sdkContext,
+            R.drawable.ic_pin, // текущая "старая" иконка -> оставим для проектов
+            Size(72, 72)
+        )
+
+        return MarkerOptions(
+            position = point,
+            icon = icon,
+            text = null,
+            userData = userData
+        )
+    }
+
+    // --- NEW: отдельная иконка для парков ---
+    @JvmStatic
+    fun markerOptionsPark(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
         val icon = imageFromResource(
             sdkContext,
             R.drawable.smart_ecology_eco_nature_world_icon_,
@@ -41,6 +59,11 @@ object DgisInterop {
             text = null,
             userData = userData
         )
+    }
+
+    @JvmStatic
+    fun markerOptions(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
+        return markerOptionsProject(sdkContext, point, userData)
     }
 
     @JvmStatic
@@ -63,7 +86,7 @@ object DgisInterop {
     }
 
     @JvmStatic
-    fun cameraCenter(map: ru.dgis.sdk.map.Map): DoubleArray {
+    fun cameraCenter(map: Map): DoubleArray {
         val p = map.camera.position.point
         val lat = p.latitude.value
         val lng = p.longitude.value
