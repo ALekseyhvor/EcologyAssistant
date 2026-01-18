@@ -79,6 +79,19 @@
             android:minHeight="100dp"
             android:hint="@string/txt_mainText" />
 
+        <TextView
+            android:id="@+id/tvPickedLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Геопозиция не выбрана"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnPickLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Выбрать на карте" />
+
         <Button
             android:id="@+id/buttonCreateProject"
             android:layout_width="match_parent"

@@ -1,9 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ru.dgis.sdk.map.MapView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/dgisMapView"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mapRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:dgis_cameraTargetLat="56.324417"
-    app:dgis_cameraTargetLng="43.561796"
-    app:dgis_cameraZoom="12.0" />
+    android:layout_height="match_parent">
+
+    <ru.dgis.sdk.map.MapView
+        android:id="@+id/dgisMapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Пин по центру экрана (визуальный выбор точки) -->
+    <ImageView
+        android:id="@+id/centerPin"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:src="@android:drawable/ic_menu_mylocation"
+        android:contentDescription="@string/app_name" />
+
+    <!-- Кнопка подтверждения выбора точки -->
+    <Button
+        android:id="@+id/btnPickPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:text="Выбрать эту точку" />
+
+</FrameLayout>
