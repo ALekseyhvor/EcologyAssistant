@@ -1,10 +1,7 @@
 package space.hvoal.ecologyassistant.ui.tabs;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Switch;
 
@@ -15,10 +12,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.ClassSnapshotParser;
-import com.firebase.ui.database.FirebaseArray;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,18 +20,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import space.hvoal.ecologyassistant.R;
 import space.hvoal.ecologyassistant.model.Project;
-import space.hvoal.ecologyassistant.viewHolder.ProjectViewHolder;
+import space.hvoal.ecologyassistant.ui.profile.LikedProjectsAdapter;
 
 public class LikedProjectsFragment extends Fragment {
 
@@ -49,8 +41,17 @@ public class LikedProjectsFragment extends Fragment {
 
     private FirebaseAuth auth;
     private DatabaseReference projectsRef;
+    private DatabaseReference likesRef;
 
-    private FirebaseRecyclerAdapter<Project, ProjectViewHolder> adapter;
+    private String uid;
+
+    private Query likedQuery;
+    private ValueEventListener likedListener;
+
+    private final Map<String, Project> loadedProjects = new HashMap<>();
+    private final HashSet<String> currentLikedIds = new HashSet<>();
+
+    private LikedProjectsAdapter adapter;
 
     public LikedProjectsFragment() {
         super(R.layout.fragment_liked_projects);
@@ -62,6 +63,9 @@ public class LikedProjectsFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         projectsRef = FirebaseDatabase.getInstance().getReference().child("Projects");
+        likesRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+
+        uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
 
         backbtn = view.findViewById(R.id.back_button);
         switchDate = view.findViewById(R.id.switchDate);
@@ -75,136 +79,157 @@ public class LikedProjectsFragment extends Fragment {
         switchDate.setVisibility(View.GONE);
         switchSubscribersCnt.setVisibility(View.GONE);
 
-        rebuildAdapter();
-    }
+        adapter = new LikedProjectsAdapter(new LikedProjectsAdapter.Listener() {
+            @Override
+            public void onToggleLike(@NonNull Project project) {
+                toggleLike(project.getId(), uid, () -> { });
+            }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (adapter != null) adapter.startListening();
-    }
+            @Override
+            public void onOpenDetails(@NonNull Project project) {
+                Bundle b = new Bundle();
+                b.putString("projectId", project.getId());
+                NavHostFragment.findNavController(LikedProjectsFragment.this)
+                        .navigate(R.id.projectDetailsFragment, b);
+            }
+        });
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (adapter != null) adapter.stopListening();
+        recyclerView.setAdapter(adapter);
+
+        if (uid == null || uid.trim().isEmpty()) return;
+
+        likedQuery = likesRef.orderByChild(uid).equalTo(true);
+        attachLikedListener();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        if (likedQuery != null && likedListener != null) {
+            likedQuery.removeEventListener(likedListener);
+        }
+
+        likedQuery = null;
+        likedListener = null;
+
+        loadedProjects.clear();
+        currentLikedIds.clear();
+
         adapter = null;
+        recyclerView = null;
     }
 
-    private void rebuildAdapter() {
-        String uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
-        if (uid == null || uid.trim().isEmpty()) return;
+    private void attachLikedListener() {
+        likedListener = new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashSet<String> newLikedIds = new HashSet<>();
+                for (DataSnapshot projectNode : snapshot.getChildren()) {
+                    String projectId = projectNode.getKey();
+                    if (projectId != null) newLikedIds.add(projectId);
+                }
 
-        Query query = projectsRef.orderByChild("likes/" + uid).equalTo(true);
+                HashSet<String> removed = new HashSet<>(currentLikedIds);
+                removed.removeAll(newLikedIds);
+                for (String id : removed) {
+                    currentLikedIds.remove(id);
+                    loadedProjects.remove(id);
+                }
 
-        FirebaseRecyclerOptions<Project> options = new FirebaseRecyclerOptions.Builder<Project>()
-                .setSnapshotArray(new FirebaseArray<>(query, new ClassSnapshotParser<>(Project.class)))
-                .build();
+                HashSet<String> added = new HashSet<>(newLikedIds);
+                added.removeAll(currentLikedIds);
+                currentLikedIds.addAll(added);
 
-        if (adapter != null) adapter.stopListening();
+                if (added.isEmpty()) {
+                    publishList();
+                    return;
+                }
 
-        adapter = new FirebaseRecyclerAdapter<Project, ProjectViewHolder>(options) {
+                for (String projectId : added) {
+                    projectsRef.child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override public void onDataChange(@NonNull DataSnapshot projectSnap) {
+                            Project p = projectSnap.getValue(Project.class);
+                            if (p != null) {
+                                if (p.getId() == null || p.getId().trim().isEmpty()) {
+                                    try { p.setId(projectSnap.getKey()); } catch (Exception ignored) { }
+                                }
+                                loadedProjects.put(projectId, p);
+                            } else {
+                                loadedProjects.remove(projectId);
+                            }
+                            publishList();
+                        }
 
-            @Override
-            protected void onBindViewHolder(@NonNull ProjectViewHolder holder, int position, @NonNull Project model) {
-                holder.nameUserTextView.setText(model.getAuthor());
-                holder.nameprojectTextView.setText(model.getNameProject());
-                holder.textprojectTextView.setText(model.getDescription());
-
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat viewFormat = new SimpleDateFormat("MMM-dd HH:mm");
-
-                String viewDate = "";
-                try {
-                    Date date = dateFormat.parse(model.getDateTime());
-                    if (date != null) viewDate = viewFormat.format(date);
-                } catch (ParseException ignored) { }
-
-                holder.creationdateTextView.setText(viewDate);
-
-                int commentsCount = Optional.ofNullable(model.getComments()).orElse(new ArrayList<>()).size();
-                holder.commTextView.setText(String.valueOf(commentsCount));
-
-                int likesCount = 0;
-                if (model.getLikesCount() != null) likesCount = model.getLikesCount();
-                else if (model.getLikes() != null) likesCount = model.getLikes().size();
-                holder.likesTextView.setText(String.valueOf(likesCount));
-
-                holder.likeButton.setVisibility(View.VISIBLE);
-                holder.likeButton.setImageResource(android.R.drawable.btn_star_big_on);
-
-                holder.likeButton.setOnClickListener(v -> {
-                    holder.likeButton.setEnabled(false);
-                    toggleLike(model.getId(), uid, () -> holder.likeButton.setEnabled(true));
-                });
-
-                holder.chatButton.setOnClickListener(v -> {
-                    Bundle b = new Bundle();
-                    b.putString("projectId", model.getId());
-                    NavHostFragment.findNavController(LikedProjectsFragment.this)
-                            .navigate(R.id.projectDetailsFragment, b);
-                });
+                        @Override public void onCancelled(@NonNull DatabaseError error) {
+                            publishList();
+                        }
+                    });
+                }
             }
 
-            @NonNull
-            @Override
-            public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_item, parent, false);
-                return new ProjectViewHolder(v, true);
-            }
+            @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
 
-        recyclerView.setAdapter(adapter);
+        likedQuery.addValueEventListener(likedListener);
+    }
 
-        if (getLifecycle().getCurrentState().isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)) {
-            adapter.startListening();
+    private void publishList() {
+        List<Project> list = new ArrayList<>();
+        for (String id : currentLikedIds) {
+            Project p = loadedProjects.get(id);
+            if (p != null) list.add(p);
         }
+        if (adapter != null) adapter.setItems(list);
     }
 
     private interface Done { void run(); }
 
     private void toggleLike(String projectId, String uid, Done done) {
-        projectsRef.child(projectId).runTransaction(new Transaction.Handler() {
+        if (projectId == null || projectId.trim().isEmpty() || uid == null || uid.trim().isEmpty()) {
+            done.run();
+            return;
+        }
+
+        DatabaseReference likeNode = likesRef.child(projectId).child(uid);
+
+        likeNode.runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                Object val = currentData.getValue();
+                boolean alreadyLiked = (val instanceof Boolean && (Boolean) val);
 
-                Object likesObj = currentData.child("likes").getValue();
-                Map<String, Object> likes = (likesObj instanceof Map)
-                        ? (Map<String, Object>) likesObj
-                        : new HashMap<>();
-
-                boolean alreadyLiked = likes.containsKey(uid);
-
-                long cnt = 0;
-                Object cntObj = currentData.child("likesCount").getValue();
-                if (cntObj instanceof Long) cnt = (Long) cntObj;
-                else if (cntObj instanceof Integer) cnt = ((Integer) cntObj).longValue();
-
-                if (alreadyLiked) {
-                    likes.remove(uid);
-                    cnt = Math.max(0, cnt - 1);
-                } else {
-                    likes.put(uid, true);
-                    cnt = cnt + 1;
-                }
-
-                currentData.child("likes").setValue(likes);
-                currentData.child("likesCount").setValue(cnt);
+                if (alreadyLiked) currentData.setValue(null);
+                else currentData.setValue(true);
 
                 return Transaction.success(currentData);
             }
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot snapshot) {
-                done.run();
+                boolean nowLiked = snapshot != null && Boolean.TRUE.equals(snapshot.getValue(Boolean.class));
+
+                projectsRef.child(projectId).child("likesCount").runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        long cnt = 0;
+                        Object cntObj = currentData.getValue();
+                        if (cntObj instanceof Long) cnt = (Long) cntObj;
+                        else if (cntObj instanceof Integer) cnt = ((Integer) cntObj).longValue();
+
+                        if (nowLiked) cnt = cnt + 1;
+                        else cnt = Math.max(0, cnt - 1);
+
+                        currentData.setValue(cnt);
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error2, boolean committed2, @Nullable DataSnapshot snapshot2) {
+                        done.run();
+                    }
+                });
             }
         });
     }
