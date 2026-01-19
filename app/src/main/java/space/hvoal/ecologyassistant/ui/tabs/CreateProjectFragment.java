@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,7 +46,7 @@ import space.hvoal.ecologyassistant.utils.ProjectWriter;
 
 import android.app.AlertDialog;
 import android.widget.TextView;
-import androidx.lifecycle.ViewModelProvider;
+
 import space.hvoal.ecologyassistant.ui.map.LocationPickerViewModel;
 
 public class CreateProjectFragment extends Fragment {
@@ -58,7 +57,7 @@ public class CreateProjectFragment extends Fragment {
     private FirebaseAuth auth;
     private DatabaseReference userRef;
 
-    private RelativeLayout root;
+    private View root;
     private EditText authortext, nameproject, maintext;
     private ChipGroup chipGroupCategory;
 
