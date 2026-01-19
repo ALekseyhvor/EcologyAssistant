@@ -107,9 +107,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
 
         String projectId = model.getId();
         boolean cachedLiked = projectId != null && Boolean.TRUE.equals(likedCache.get(projectId));
-        holder.likeButton.setImageResource(
-                cachedLiked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
-        );
+        holder.likeButton.setSelected(cachedLiked);
 
         holder.likeButton.setEnabled(currentUid != null);
 
@@ -122,9 +120,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
                     boolean liked = snapshot.exists();
                     likedCache.put(projectId, liked);
 
-                    holder.likeButton.setImageResource(
-                            liked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
-                    );
+                    holder.likeButton.setSelected(liked);
                 }
 
                 @Override
@@ -144,6 +140,8 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectViewHolder> {
         holder.likeButton.setOnClickListener(v -> {
             if (listener == null) return;
             if (currentUid == null) return;
+
+            holder.likeButton.setSelected(!holder.likeButton.isSelected());
 
             holder.likeButton.setEnabled(false);
             listener.onToggleLike(model);
