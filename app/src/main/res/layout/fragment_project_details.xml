@@ -1,113 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="space.hvoal.ecologyassistant.ui.project.ProjectDetailsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#00695C"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/teal_700">
+            android:layout_height="56dp"
+            android:background="#00695C"
+            app:contentInsetStartWithNavigation="0dp">
 
-            <ImageView
-                android:id="@+id/back_button"
-                android:layout_width="35dp"
-                android:layout_height="40dp"
-                android:contentDescription="back"
-                android:src="?attr/homeAsUpIndicator"
-                app:tint="@color/white" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:contentDescription="back"
+                    android:src="?attr/homeAsUpIndicator"
+                    app:tint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvDetailsTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Детали проекта"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintStart_toEndOf="@id/back_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:padding="16dp">
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvProjectTitle"
+            <!-- Header card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
 
-            <!-- NEW: лайк + счётчик -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/ivProjectLike"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:contentDescription="like"
-                    android:src="@android:drawable/btn_star_big_off"
-                    android:clickable="true"
-                    android:focusable="true"/>
-
-                <TextView
-                    android:id="@+id/tvProjectLikesCount"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:textSize="16sp"
-                    android:text="0"/>
-            </LinearLayout>
+                    android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvProjectAuthor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/tvProjectTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#0B1220"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/likeBlock"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Сбор батареек в районе / Эко-инициатива" />
 
-            <TextView
-                android:id="@+id/tvProjectDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="14sp" />
+                    <!-- Like block -->
+                    <LinearLayout
+                        android:id="@+id/likeBlock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tvProjectTitle">
 
-            <TextView
-                android:id="@+id/tvProjectCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:textSize="14sp" />
+                        <ImageView
+                            android:id="@+id/ivProjectLike"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:padding="6dp"
+                            android:contentDescription="like"
+                            android:src="@drawable/like_heart_selector"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:tint="#00695C"
+                            android:background="?attr/selectableItemBackgroundBorderless" />
 
-            <TextView
-                android:id="@+id/tvProjectDescription"
+                        <TextView
+                            android:id="@+id/tvProjectLikesCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#0B1220"
+                            tools:text="12" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvProjectAuthor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="14sp"
+                        android:textColor="#6B7280"
+                        app:layout_constraintTop_toBottomOf="@id/tvProjectTitle"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="Автор: Алексей Хворостов" />
+
+                    <TextView
+                        android:id="@+id/tvProjectDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="13sp"
+                        android:textColor="#6B7280"
+                        app:layout_constraintTop_toBottomOf="@id/tvProjectAuthor"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="Создан: Jan-15 14:23" />
+
+                    <TextView
+                        android:id="@+id/tvProjectCategory"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="13sp"
+                        android:textColor="#00695C"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/tvProjectDate"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="Категория: Переработка" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textSize="18sp" />
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Описание"
+                        android:textColor="#0B1220"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvProjectDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="2dp"
+                        android:textColor="#111827"
+                        android:maxLines="8"
+                        android:ellipsize="end"
+                        tools:text="Подробное описание проекта... Если текста много, он будет обрезан." />
+
+                    <TextView
+                        android:id="@+id/tvReadMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Подробнее"
+                        android:textSize="14sp"
+                        android:textColor="#00695C"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <Button
                 android:id="@+id/btnOpenComments"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/button_reg"
                 android:text="Комментарии"
                 android:textAllCaps="false"
-                android:textColor="#FFFF"
-                android:textSize="18sp" />
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@null" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

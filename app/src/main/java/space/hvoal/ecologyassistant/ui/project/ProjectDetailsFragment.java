@@ -82,9 +82,7 @@ public class ProjectDetailsFragment extends Fragment {
 
         vm.liked().observe(getViewLifecycleOwner(), liked -> {
             boolean isLiked = liked != null && liked;
-            ivLike.setImageResource(
-                    isLiked ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off
-            );
+            ivLike.setSelected(isLiked);
         });
 
         vm.state().observe(getViewLifecycleOwner(), state -> {
