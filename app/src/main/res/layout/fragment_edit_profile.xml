@@ -1,93 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_element_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="space.hvoal.ecologyassistant.ui.profile.EditProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#00695C"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tool_bar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/teal_700">
+            android:layout_height="56dp"
+            android:background="#00695C"
+            app:contentInsetStartWithNavigation="0dp">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
 
                 <ImageView
                     android:id="@+id/back_button"
-                    android:layout_width="35dp"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:padding="8dp"
                     android:src="?attr/homeAsUpIndicator"
-                    app:tint="@color/white" />
+                    android:contentDescription="back"
+                    app:tint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Редактирование профиля"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintStart_toEndOf="@id/back_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="8dp" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/app_bar"
-        android:orientation="vertical">
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-        <EditText
-            android:id="@+id/editTextNameChange"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:ems="10"
-            android:hint="@string/txt_name"
-            android:hyphenationFrequency="none"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:textColorHint="#1D1F1F"
-            android:textSize="25sp" />
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp">
 
-        <EditText
-            android:id="@+id/editTextSecondNameChange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:ems="10"
-            android:hint="@string/txt_secondname"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            android:textColorHint="#171817"
-            android:textSize="25sp" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardProfileEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/editTextNumberSignedChange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:ems="10"
-            android:hint="@string/txt_number"
-            android:inputType="numberSigned"
-            android:textColorHint="#171817"
-            android:textSize="25sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <Button
-            android:id="@+id/button_savedChange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/txt_save_change"
-            android:background="@drawable/button_reg"
-            android:textAllCaps="false"
-            android:textSize="20sp"/>
+                    <!-- Имя -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="14dp"
+                        app:boxCornerRadiusTopEnd="14dp"
+                        app:boxCornerRadiusBottomStart="14dp"
+                        app:boxCornerRadiusBottomEnd="14dp"
+                        app:boxStrokeColor="#00695C"
+                        app:hintTextColor="#00695C">
 
-    </LinearLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextNameChange"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/txt_name"
+                            android:inputType="textPersonName"
+                            android:textSize="16sp"
+                            android:minHeight="48dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-</RelativeLayout>
+                    <!-- Фамилия -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="14dp"
+                        app:boxCornerRadiusTopEnd="14dp"
+                        app:boxCornerRadiusBottomStart="14dp"
+                        app:boxCornerRadiusBottomEnd="14dp"
+                        app:boxStrokeColor="#00695C"
+                        app:hintTextColor="#00695C">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextSecondNameChange"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/txt_secondname"
+                            android:inputType="textPersonName"
+                            android:textSize="16sp"
+                            android:minHeight="48dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Телефон / номер -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="14dp"
+                        app:boxCornerRadiusTopEnd="14dp"
+                        app:boxCornerRadiusBottomStart="14dp"
+                        app:boxCornerRadiusBottomEnd="14dp"
+                        app:boxStrokeColor="#00695C"
+                        app:hintTextColor="#00695C">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextNumberSignedChange"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/txt_number"
+                            android:inputType="phone"
+                            android:textSize="16sp"
+                            android:minHeight="48dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Email (только для чтения) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="14dp"
+                        app:boxCornerRadiusTopEnd="14dp"
+                        app:boxCornerRadiusBottomStart="14dp"
+                        app:boxCornerRadiusBottomEnd="14dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextEmailReadOnly"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Почта"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:textSize="16sp"
+                            android:minHeight="48dp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/button_savedChange"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/txt_save_change"
+                android:background="@drawable/button_reg"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/cardProfileEdit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:backgroundTint="@null"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

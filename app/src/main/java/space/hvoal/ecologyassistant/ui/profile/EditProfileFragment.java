@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +34,7 @@ public class EditProfileFragment extends Fragment {
     private EditText nameChange, secondNameChange, numberChange;
     private Button buttonSavedChange;
     private ImageView backBtn;
-    private RelativeLayout root;
+    private View root;
 
     private FirebaseAuth auth;
     private DatabaseReference usersRef;
@@ -61,6 +62,10 @@ public class EditProfileFragment extends Fragment {
 
         buttonSavedChange = view.findViewById(R.id.button_savedChange);
         backBtn = view.findViewById(R.id.back_button);
+
+        EditText etEmail = view.findViewById(R.id.editTextEmailReadOnly);
+        FirebaseUser fu = FirebaseAuth.getInstance().getCurrentUser();
+        etEmail.setText(fu != null ? fu.getEmail() : "");
 
         backBtn.setOnClickListener(v -> NavHostFragment.findNavController(this).navigateUp());
         buttonSavedChange.setOnClickListener(v -> changeInfoController());
