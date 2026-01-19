@@ -3,15 +3,15 @@
     <item
         android:id="@+id/discussionFragment"
         android:title="Проекты"
-        android:icon="@android:drawable/ic_menu_search" />
+        android:icon="@drawable/ic_projects_24" />
 
     <item
         android:id="@+id/mapFragment"
         android:title="Карта"
-        android:icon="@android:drawable/ic_dialog_map" />
+        android:icon="@drawable/ic_map_24" />
 
     <item
         android:id="@+id/profileFragment"
         android:title="Профиль"
-        android:icon="@android:drawable/ic_menu_myplaces" />
+        android:icon="@drawable/ic_profile_24" />
 </menu>
