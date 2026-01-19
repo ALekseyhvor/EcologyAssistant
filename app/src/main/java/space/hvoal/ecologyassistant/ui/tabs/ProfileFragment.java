@@ -40,6 +40,8 @@ public class ProfileFragment extends Fragment {
     private Query likedQuery;
 
     private TextView tvName;
+
+    private TextView tvAvatarInitials;
     private TextView tvEmail;
     private TextView tvMyCount;
     private TextView tvLikedCount;
@@ -58,6 +60,7 @@ public class ProfileFragment extends Fragment {
         likesRef = FirebaseDatabase.getInstance().getReference().child("Likes");
 
         tvName = view.findViewById(R.id.tvProfileName);
+        tvAvatarInitials = view.findViewById(R.id.tvAvatarInitials);
         tvEmail = view.findViewById(R.id.tvProfileEmail);
         tvMyCount = view.findViewById(R.id.tvMyProjectsCount);
         tvLikedCount = view.findViewById(R.id.tvLikedProjectsCount);
@@ -70,6 +73,7 @@ public class ProfileFragment extends Fragment {
         currentUid = fu != null ? fu.getUid() : null;
 
         tvName.setText("Профиль");
+        updateAvatarInitials(null);
         tvEmail.setText(fu != null && fu.getEmail() != null ? fu.getEmail() : "");
         tvMyCount.setText("0");
         tvLikedCount.setText("0");
@@ -86,7 +90,8 @@ public class ProfileFragment extends Fragment {
 
         View btnEditProfile = view.findViewById(R.id.btn_edit_profile);
         btnEditProfile.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_profile_to_edit_profile)
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_profile_to_edit_profile)
         );
 
         btnLogout.setOnClickListener(v -> {
@@ -110,11 +115,32 @@ public class ProfileFragment extends Fragment {
 
         userListener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Object nameVal = snapshot.child("name").getValue();
-                if (nameVal != null) tvName.setText(nameVal.toString());
+                String firstName = snapshot.child("name").getValue(String.class);
+                String lastName  = snapshot.child("secondname").getValue(String.class);
+
+                String displayName;
+                if (firstName == null) firstName = "";
+                if (lastName == null) lastName = "";
+
+                displayName = (firstName + " " + lastName).trim();
+
+                if (displayName.isEmpty()) {
+                    String nameVal = snapshot.child("name").getValue(String.class);
+                    displayName = nameVal != null ? nameVal.trim() : "";
+                }
+
+                if (!displayName.isEmpty()) {
+                    tvName.setText(displayName);
+                } else {
+                    tvName.setText("Профиль");
+                }
+
+                updateAvatarInitials(displayName);
             }
+
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
+
         usersRef.child(currentUid).addValueEventListener(userListener);
 
         myProjectsQuery = projectsRef.orderByChild("authorId").equalTo(currentUid);
@@ -134,6 +160,35 @@ public class ProfileFragment extends Fragment {
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
         likedQuery.addValueEventListener(likedProjectsCountListener);
+    }
+
+    private void updateAvatarInitials(String fullName) {
+        if (tvAvatarInitials == null) return;
+
+        String initials = "?";
+        if (fullName != null) {
+            String name = fullName.trim();
+            if (!name.isEmpty()) {
+                String[] parts = name.split("\\s+");
+
+                String first = getFirstLetter(parts[0]);
+                String second = (parts.length > 1) ? getFirstLetter(parts[1]) : "";
+
+                String result = (first + second).trim();
+                if (!result.isEmpty()) initials = result;
+            }
+        }
+
+        tvAvatarInitials.setText(initials);
+    }
+
+    private String getFirstLetter(String s) {
+        if (s == null) return "";
+        s = s.trim();
+        if (s.isEmpty()) return "";
+
+        int cp = s.codePointAt(0);
+        return new String(Character.toChars(Character.toUpperCase(cp)));
     }
 
     @Override
