@@ -3,7 +3,6 @@ package space.hvoal.ecologyassistant.ui.comments;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ProjectCommentsFragment extends Fragment {
     private ImageView backBtn;
     private RecyclerView rv;
     private Button sendButton;
-    private EditText editMessageText;
+    private TextInputEditText editMessageText;
 
     public ProjectCommentsFragment() {
         super(R.layout.fragment_project_comments);

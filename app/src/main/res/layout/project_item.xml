@@ -32,7 +32,7 @@
             android:textColor="#1F2933"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:text="Иван Иванов"
+            tools:text="Алексей Хворостов"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/textTime"
             app:layout_constraintTop_toTopOf="parent"/>
