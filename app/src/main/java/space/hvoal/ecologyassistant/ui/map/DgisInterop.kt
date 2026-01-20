@@ -27,12 +27,11 @@ object DgisInterop {
         )
     }
 
-    // --- NEW: отдельная иконка для проектов ---
     @JvmStatic
     fun markerOptionsProject(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
         val icon = imageFromResource(
             sdkContext,
-            R.drawable.ic_pin, // текущая "старая" иконка -> оставим для проектов
+            R.drawable.ic_project_marker_24,
             Size(72, 72)
         )
 
@@ -44,12 +43,11 @@ object DgisInterop {
         )
     }
 
-    // --- NEW: отдельная иконка для парков ---
     @JvmStatic
     fun markerOptionsPark(sdkContext: Context, point: GeoPointWithElevation, userData: Any?): MarkerOptions {
         val icon = imageFromResource(
             sdkContext,
-            R.drawable.smart_ecology_eco_nature_world_icon_,
+            R.drawable.ic_park_24,
             Size(72, 72)
         )
 
